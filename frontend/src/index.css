@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body,
+html,
+#root {
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+body,
+html {
+    width: 100vw;
+    min-height: 100vh;
+    font-size: 16px;
+}
+
+#root {
+    width: 100%;
+    min-height: 100%;
+    font-family: DmSansRegular, Arial, sans-serif;
+    
+}
+
+/* topography */
+@font-face {
+    font-family: PoppinsBold;
+    src: url('./Assets/fonts/Poppins-Bold.ttf');
+}
+
+@font-face {
+    font-family: PoppinsSemiBold;
+    src: url('./Assets/fonts/Poppins-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: DmSansRegular;
+    src: url('./Assets/fonts/DMSans-Regular.ttf');
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+@media screen and (max-width: 768px) {
+    body,html {
+        font-size: 14px;
+    }
+}
