@@ -17,31 +17,34 @@ export const LoginForm = () => {
   };
   return (
     <Main>
-      <Form>
-        <header>Login</header>
-        <div className="input">
-          <label htmlFor="name"> Username </label>
-          <input
-            type="text"
-            name="name"
-            placeholder="(e.g). JohnDoe"
-            value={data.username}
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <div className="input">
-          <label htmlFor="password"> password </label>
-          <input
-            type="password"
-            name="password"
-            value={data.password}
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <button className="authButton" type="button" value="send">
-          Send
-        </button>
-      </Form>
+      <section className="flex flex-col w-full items-center p-12 md:p-24 py-12 space-y-8">
+        <Form>
+          <section></section>
+          <header>Login</header>
+          <div className="input">
+            <label htmlFor="name"> Username </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="(e.g). JohnDoe"
+              value={data.username}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div className="input">
+            <label htmlFor="password"> password </label>
+            <input
+              type="password"
+              name="password"
+              value={data.password}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <button className="authButton" type="button" value="send">
+            Send
+          </button>
+        </Form>
+      </section>
     </Main>
   );
 };
