@@ -7,7 +7,9 @@ const Wrapper = () => {
   return (
     <Main>
         <NavBar/>
+        <div className='all'>
         <Outlet/>
+        </div>
         <Footer/>
     </Main>
   )
