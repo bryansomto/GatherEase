@@ -1,6 +1,6 @@
 import React from "react";
 import { Main } from "./styles";
-import { Hero, Developers, Services, Faq } from "../components/Home/index";
+import { Hero, Developers, Services, Faq } from "../Components/Home/index";
 
 const Home = () => {
   return (

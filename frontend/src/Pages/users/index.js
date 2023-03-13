@@ -1,5 +1,5 @@
-import Profile from "./Profile"
-import Register from "./Register"
-import UpdateUser from "./UpdateUser"
+import Profile from "./Profile";
+import Login from "./Login";
+import UpdateUser from "./UpdateUser";
 
-export {Profile,Register,UpdateUser}
+export { Profile, Login, UpdateUser };

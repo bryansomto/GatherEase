@@ -1,13 +1,13 @@
-import React from 'react'
-import {Main} from "./styles"
-import { CombineInfo, Hero } from '../components/Contact/index'
+import React from "react";
+import { Main } from "./styles";
+import { CombineInfo, Hero } from "../Components/Contact/index";
 const ContactUs = () => {
   return (
     <Main>
-      <Hero/>
-      <CombineInfo/>
+      <Hero />
+      <CombineInfo />
     </Main>
-  )
-}
+  );
+};
 
-export default ContactUs
+export default ContactUs;

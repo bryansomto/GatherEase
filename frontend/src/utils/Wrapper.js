@@ -1,46 +1,63 @@
-export const NavbarLinks = [{
+export const NavbarLinks = [
+  {
     text: "home",
-    link: "/"
-}, {
+    link: "/",
+  },
+  {
     text: "events",
-    link: "/events"
-}, { 
+    link: "/events",
+  },
+  {
     text: "contact us",
-    link: "/contacts"
-}, {
+    link: "/contacts",
+  },
+  {
     text: "about",
-    link: "/about"
-}]
+    link: "/about",
+  },
+];
 
-export const FooterSocial = [{
+export const FooterSocial = [
+  {
     text: "Whatsapp",
-    link: "#"
-}, {
+    link: "#",
+  },
+  {
     text: "Instagram",
-    link: "#"
-}, { 
+    link: "#",
+  },
+  {
     text: "twitter",
-    link: "#"
-}]
+    link: "#",
+  },
+];
 
-export const FooterAccount= [{
+export const FooterAccount = [
+  {
     text: "login",
-    link: "#"
-}, {
+    link: "#",
+  },
+  {
     text: "signup",
-    link: "#"
-}, { 
+    link: "#",
+  },
+  {
     text: "Profile",
-    link: "#"
-}]
+    link: "#",
+  },
+];
 
-export const FooterEvents = [{
+export const FooterEvents = [
+  {
     text: "available events",
-    link: "#"
-}, {
+    link: "#",
+  },
+  {
     text: "your events",
-    link: "#"
-}, { 
+    link: "#",
+  },
+  {
     text: "create your own",
-    link: "#"
-}]
+    link: "#",
+  },
+];
