@@ -1,8 +1,12 @@
 import React from 'react'
-
+import {Main} from './styles'
+import { Info,Hero} from '../components/About/index'
 const About = () => {
   return (
-    <div>About</div>
+    <Main>
+      <Hero/>
+      <Info/>
+    </Main>
   )
 }
 

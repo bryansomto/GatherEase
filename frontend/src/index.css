@@ -47,6 +47,6 @@ a {
 @media screen and (max-width: 768px) {
   body,
   html {
-    font-size: 14px;
+    font-size: 12px;
   }
 }

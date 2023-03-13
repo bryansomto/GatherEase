@@ -1,8 +1,12 @@
 import React from 'react'
-
+import {Main} from "./styles"
+import { CombineInfo, Hero } from '../components/Contact/index'
 const ContactUs = () => {
   return (
-    <div>ContactUs</div>
+    <Main>
+      <Hero/>
+      <CombineInfo/>
+    </Main>
   )
 }
 
