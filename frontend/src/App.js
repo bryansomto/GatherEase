@@ -4,7 +4,7 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { UpdateUser, Profile, Login } from "./Pages/users/index";
+import { UpdateUser, Profile, Login, SignUp } from "./Pages/users/index";
 import {
   AllEvents,
   SingleEvent,
@@ -25,10 +25,11 @@ export const router = createBrowserRouter(
         <Route path="events/add" element={<CreateEvent />} />
         <Route path="events/update/:id" element={<UpdateEvent />} />
         <Route path="events/guests/:id" element={<GuestList />} />
-        <Route path="login" element={<Login />} />
         <Route path="Profile" element={<Profile />} />
         <Route path="Profile/update" element={<UpdateUser />} />
       </Route>
+      <Route path="login" element={<Login />} />
+      <Route path="signup" element={<SignUp />} />
     </Route>
   )
 );
