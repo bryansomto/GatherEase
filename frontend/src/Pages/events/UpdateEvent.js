@@ -1,8 +1,11 @@
 import React from 'react'
-
+import {Main} from "../styles"
+import {Wrapper} from "../../Components/events/UpdateEvent/index"
 const UpdateEvent = () => {
   return (
-    <div>UpdateEvent</div>
+    <Main>
+      <Wrapper/>
+    </Main>
   )
 }
 

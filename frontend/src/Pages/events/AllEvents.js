@@ -1,8 +1,12 @@
 import React from 'react'
-
+import {Events,Hero} from "../../Components/events/AllEvents/index"
+import  {Main} from "../styles"
 const AllEvents = () => {
   return (
-    <div>AllEvents</div>
+    <Main>
+      <Hero/>
+      <Events/>
+    </Main>
   )
 }
 
