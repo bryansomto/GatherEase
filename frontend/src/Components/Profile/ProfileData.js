@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { ProfileInfo } from "../utils/Profile";
+import { profileInfo, profileEvents } from "../utils/Profile";
 
 export const ProfileDetails = () => {
   return (
     <Main>
       <section className="list">
-        <List data={ProfileInfo} title="profile details" />
+        <ProfileList data={profileInfo} title="profile details" />
       </section>
     </Main>
   );
@@ -15,13 +15,15 @@ export const ProfileDetails = () => {
 
 export const ProfileEvents = () => {
   return (
-    <section>
-      <header> Events </header>
-    </section>
+    <Main>
+      <section className="list">
+        <EventList data={profileEvents} title="Events" />
+      </section>
+    </Main>
   );
 };
 
-const List = ({ data, title }) => {
+const ProfileList = ({ data, title }) => {
   return (
     <div className="list">
       <header>{title}</header>
@@ -29,6 +31,25 @@ const List = ({ data, title }) => {
         <div>
           <p className="profileInfo font-bold">{i.key}</p>
           <p className="profileInfo">{i.value}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const EventList = ({ data, title }) => {
+  return (
+    <div className="list">
+      <header>{title}</header>
+      {data.map((i) => (
+        <div>
+          <img
+            className="object-contain h-48 w-96"
+            src={i.image}
+            alt={i.title}
+          />
+          <p>{i.title}</p>
+          <p>{i.created}</p>
         </div>
       ))}
     </div>
