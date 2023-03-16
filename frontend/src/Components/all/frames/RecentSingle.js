@@ -30,18 +30,21 @@ export const RecentSingle = ({image,title,description,createdAt, index}) => {
 
 
 const Main = styled.div`
-    ${tw`flex flex-col md:flex-row items-start space-x-0 md:space-x-5`}
+    ${tw`flex flex-col md:flex-row items-start space-y-4 md:space-y-0 space-x-0 md:space-x-5`}
 
         .event-image {
-          ${tw`rounded-lg text-sm w-full min-w-[100px] max-w-none md:max-w-[220px] h-full`}
+          ${tw`rounded-lg text-xs lg:text-sm w-full min-w-[100px] max-w-none md:max-w-[220px] h-full`}
         }
     .inner-info{
         ${tw`flex flex-col space-y-2`}
+        .font{
+          ${tw`text-xs lg:text-sm`}
+        }
         p{
-            ${tw`text-sm`}
+            ${tw`text-xs lg:text-sm`}
         }
         .created {
-          ${tw`text-[rgba(0,0,0,.5)] text-sm`}
+          ${tw`text-[rgba(0,0,0,.5)] text-xs lg:text-sm`}
           span {
             ${tw`text-[rgba(0,0,0,.5)] text-xs mr-5`}
           }

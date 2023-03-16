@@ -15,7 +15,7 @@ export const Event = ({image, description,createdAt,title,index}) => {
   )
 }
 const Main = styled.div`
-${tw`w-full flex flex-col`}
+${tw`w-full flex flex-col space-y-2`}
 .event-image{
   ${tw`rounded-lg w-full h-full`}
 }.font{

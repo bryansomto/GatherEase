@@ -8,6 +8,6 @@ export const Recent = styled.div`
     
   }
   .recent{
-    ${tw`grid grid-cols-[repeat(auto-fit, minmax(200px, 1fr))] gap-5 md:flex md:flex-col space-y-0 md:space-y-5`}
+    ${tw`grid grid-cols-[repeat(auto-fit, minmax(150px, 1fr))] gap-5 md:flex md:flex-col space-y-0 md:space-y-5`}
   }
 `;

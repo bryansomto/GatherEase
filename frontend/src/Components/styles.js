@@ -4,7 +4,7 @@ export const Main = styled.section`
   ${tw`flex flex-col items-center p-12 md:p-24 py-12 space-y-8`}
 `;
 export const Form = styled.form`
-  ${tw`w-full max-w-[350px] flex flex-col space-y-5`}
+  ${tw`w-full max-w-[400px] flex flex-col space-y-5`}
   header {
     font-family: PoppinsBold;
     ${tw`capitalize`}
@@ -30,8 +30,5 @@ export const Form = styled.form`
     input {
       ${tw`w-auto cursor-pointer py-2.5 px-5 bg-newGreen text-white rounded-lg`}
     }
-  }
-  .authButton {
-    ${tw`shadow bg-indigo-900 hover:bg-indigo-800 text-white py-3`}
   }
 `;
