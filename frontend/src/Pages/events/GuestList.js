@@ -1,8 +1,11 @@
 import React from 'react'
-
+import { GuestWrapper} from '../../Components/events/GuestList'
+import {Main} from "../styles"
 const GuestList = () => {
   return (
-    <div>GuestList</div>
+    <Main>
+      <GuestWrapper/>
+    </Main>
   )
 }
 

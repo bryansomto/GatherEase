@@ -21,10 +21,10 @@ export const router = createBrowserRouter(
         <Route path="about" element={<About />} />
         <Route path="contacts" element={<ContactUs />} />
         <Route path="events" element={<AllEvents />} />
-        <Route path="events/:id" element={<SingleEvent />} />
+        <Route path="events/:eventId" element={<SingleEvent />} />
         <Route path="events/add" element={<CreateEvent />} />
-        <Route path="events/update/:id" element={<UpdateEvent />} />
-        <Route path="events/guests/:id" element={<GuestList />} />
+        <Route path="events/update/:eventId" element={<UpdateEvent />} />
+        <Route path="events/guests/:eventId" element={<GuestList />} />
         <Route path="Profile" element={<Profile />} />
         <Route path="Profile/update" element={<UpdateUser />} />
       </Route>

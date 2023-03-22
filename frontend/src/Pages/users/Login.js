@@ -1,12 +1,12 @@
 import React from "react";
-import { Main } from "../styles";
+import { LoginSignUp } from "./styles";
 import { LoginForm } from "../../Components/Auth/AuthForm";
 
 const Login = () => {
   return (
-    <Main>
+    <LoginSignUp>
       <LoginForm />
-    </Main>
+    </LoginSignUp>
   );
 };
 
