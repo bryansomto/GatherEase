@@ -34,19 +34,20 @@ export const FooterSocial = [
 
 export const FooterAccount = [
   {
-    text: "login",
-    link: "#",
+    text: "join as user",
+    link: "/user/signup",
   },
   {
-    text: "signup",
-    link: "#",
-  },
-  {
-    text: "Profile",
-    link: "#",
+    text: "join as organizer",
+    link: "/organizer/signup",
   },
 ];
-
+export const FooterLoginAccount = [
+  {
+    text: "profile",
+    link: "/profile",
+  },
+];
 export const FooterEvents = [
   {
     text: "available events",

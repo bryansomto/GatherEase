@@ -26,6 +26,11 @@ html {
 
 /* topography */
 @font-face {
+  font-family: Poppins;
+  src: url("./Assets/fonts/Poppins-Regular.ttf");
+}
+
+@font-face {
   font-family: PoppinsBold;
   src: url("./Assets/fonts/Poppins-Bold.ttf");
 }

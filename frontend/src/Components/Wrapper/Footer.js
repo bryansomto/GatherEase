@@ -1,14 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { FooterAccount, FooterSocial, FooterEvents } from "../../utils/Wrapper";
+import { useGlobally } from "../../context/AppContext";
+import { FooterAccount,FooterLoginAccount, FooterSocial, FooterEvents } from "../../utils/Wrapper";
 const Footer = () => {
+  const {user}= useGlobally()
+  const {state} = useLocation()
+  let data = (!user) ? FooterAccount : FooterLoginAccount 
+  if(state){
+    data = FooterLoginAccount
+  }
   return (
     <Main>
       <div className="links">
         <List data={FooterSocial} title="social" />
-        <List data={FooterAccount} title="account" />
+        <List data={data} title="account" />
         <List data={FooterEvents} title="events" />
       </div>
       <div className="copyright">Copyright &copy;2023 GatherEase</div>

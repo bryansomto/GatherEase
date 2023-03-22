@@ -1,10 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { NavbarLinks } from "../../utils/Wrapper";
 import { FaBars } from "react-icons/fa";
+import { useGlobally } from "../../context/AppContext";
 const NavBar = () => {
+  const {user} = useGlobally()
+  const {state} = useLocation()
+  let data = user
+  if(state){
+    data = state
+  }
   return (
     <Main>
       <p>GatherEase</p>
@@ -21,12 +28,20 @@ const NavBar = () => {
             {i.text}
           </NavLink>
         ))}
-        <NavLink
+        {
+          data ? <NavLink
           className={({ isActive }) => (isActive ? "active" : "")}
-          to="/login"
+          to="/profile"
         >
-          login
-        </NavLink>
+        profile
+      </NavLink>: <NavLink
+          className={({ isActive }) => (isActive ? "active" : "")}
+          to="/user/login"
+        >
+        login
+      </NavLink>
+        }
+       
       </div>
     </Main>
   );
