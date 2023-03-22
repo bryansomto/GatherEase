@@ -6,8 +6,7 @@ const body = {
   lastname: "",
   email: "",
   password: "",
-  password1: "",
-  password2: "",
+  confirmpassword: "",
 };
 export const LoginForm = () => {
   const [data, setData] = useState(body);
@@ -93,8 +92,8 @@ export const SignUpForm = () => {
           <label htmlFor="password1"> password </label>
           <input
             type="password"
-            name="password1"
-            value={data.password1}
+            name="password"
+            value={data.password}
             onChange={(e) => handleChange(e)}
           />
         </div>
@@ -102,8 +101,8 @@ export const SignUpForm = () => {
           <label htmlFor="password2"> confirm password </label>
           <input
             type="password"
-            name="password2"
-            value={data.password2}
+            name="confirmpassword"
+            value={data.confirmpassword}
             onChange={(e) => handleChange(e)}
           />
         </div>
