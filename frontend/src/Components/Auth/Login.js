@@ -9,13 +9,13 @@ const body = {
     password: "",
   };
 const Login = () => {
-  const {login_redirect,login_error,loginUser,setFormError,user} = useGlobally()
+  const {login_error,loginUser,setFormError,user} = useGlobally()
   const {type} = useParams()
   const navigate = useNavigate()
   let currentType = (type === "organizer") ? "organizer" : "user"
     const [data, setData] = useState(body);
     const handleChange = (e) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target; 
       setData({ ...data, [name]: value });
     };
     const handleSubmit = (e)=>{
@@ -29,13 +29,11 @@ const Login = () => {
       setFormError("login", err)
     }
     useEffect(() => {
-      if(login_redirect){
-        const setter = setTimeout(()=>navigate("/profile",{state:user}),3000)
-        return () => {
-          clearTimeout(setter) 
-        }
+      if(user){
+        changeErr({msg:"Loggin successful. Redirecting...",show:true,type:"success"})
+        setTimeout(()=>navigate("/profile"), 3000)
       }
-    }, [login_redirect])
+    }, [user])
     
     return (
       <Main>

@@ -1,16 +1,12 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useGlobally } from "../../context/AppContext";
 import { FooterAccount,FooterLoginAccount, FooterSocial, FooterEvents } from "../../utils/Wrapper";
 const Footer = () => {
   const {user}= useGlobally()
-  const {state} = useLocation()
   let data = (!user) ? FooterAccount : FooterLoginAccount 
-  if(state){
-    data = FooterLoginAccount
-  }
   return (
     <Main>
       <div className="links">

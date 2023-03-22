@@ -88,7 +88,7 @@ const AppContext = ({children}) => {
                 payload:{user}
             })
             setLocal(accessToken,user.role,user.profile[`${type}Id`])
-            setFormError(path,{msg:"Loggin successful. Redirecting...",show:true,type:"success"})
+          
             setRedirect(path,true)
         } catch (error) {
             setError(error, path, {msg:"",show:true,type:"warning"})

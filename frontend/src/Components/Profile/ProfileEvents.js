@@ -21,7 +21,7 @@ const ProfileEvents = () => {
                 search
             </button>
         </div>
-        <ContentHeader title="events" url="events/add" text="add event"/>
+        <ContentHeader title="events" url="/events/add" text="add event"/>
           <div className='events'>
           {
         eventData.map(
