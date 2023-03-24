@@ -1,3 +1,4 @@
+import { getCookie } from "./utils"
 export const initialState = {
     user:null,
     login_error:{msg:"",show:false,type:""},

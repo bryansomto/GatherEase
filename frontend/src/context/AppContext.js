@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useReducer } from 'react'
 import { actions, initialState } from './Actions'
 import { reducer } from './Reducer'
+import {setCookie} from "./utils"
+
 import axios from 'axios'
-
 const AppProvider = React.createContext()
-
-
 
 const AppContext = ({children}) => {
     const [state, dispatch] = useReducer(reducer,initialState)
@@ -49,6 +48,7 @@ const AppContext = ({children}) => {
         return mapper[role]
     }
     const setLocal = (token, role,id)=>{
+        
         sessionStorage.setItem("token",token)
         sessionStorage.setItem("role",mapper(role))
         sessionStorage.setItem("id",id)
@@ -80,6 +80,7 @@ const AppContext = ({children}) => {
     const loginUser = async(type,body)=>{
         const {email,password} = body
         const path = "login"
+        
         try {
             const {data} = await client.post(`${type}/login`,{email,password})
             const {user,accessToken} = data
@@ -109,6 +110,7 @@ const AppContext = ({children}) => {
         }
     }
     const getCurrentUser = async ()=>{
+        setCookie("token","here")
         const type = mapperInvert(state.role )
         try {
             const {data} = await client.get(`${type}/profile`)

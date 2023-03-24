@@ -12,7 +12,7 @@ const Developers = () => {
       <Dev>
       {GithubData.map((item)=>{
         const {name,github,linkedin,twitter} = item
-        return <div className='developer'>
+        return <div key={name} className='developer'>
           <header>{name}</header>
           <div>
           <a href={github} target="_blank" rel='noreferrer'><FaGithub/></a>

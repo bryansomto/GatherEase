@@ -22,13 +22,13 @@ export const App = ()=>{
         <Route path="about" element={<About />} />
         <Route path="contacts" element={<ContactUs />} />
         <Route path="/" element={<ProtectedRoutes/>}>
-        <Route path="events" element={<AllEvents />} />
-        <Route path="events/:eventId" element={<SingleEvent />} />
-        <Route path="events/add" element={<CreateEvent />} />
-        <Route path="events/update/:eventId" element={<UpdateEvent />} />
-        <Route path="events/guests/:eventId" element={<GuestList />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="Profile/update" element={<UpdateUser />} />
+             <Route path="events" element={<AllEvents />} />
+             <Route path="events/:eventId" element={<SingleEvent />} />
+             <Route path="events/add" element={<CreateEvent />} />
+             <Route path="events/update/:eventId" element={<UpdateEvent />} />
+             <Route path="events/guests/:eventId" element={<GuestList />} />
+             <Route path="profile" element={<Profile />} />
+             <Route path="Profile/update" element={<UpdateUser />} />
         </Route>
       </Route>
       <Route path=":type/login" element={<Login/>} />

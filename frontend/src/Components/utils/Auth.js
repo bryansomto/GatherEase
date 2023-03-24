@@ -34,15 +34,15 @@ export const verifyRegister = ({firstName,lastName,phone,email,password,confirmP
         })
         return false
     }
-    if(phone.length !== 13){
+    if(phone.length < 13){
         changeErr({
-            msg:"Phone must be 13 characters starting with +254",
+            msg:"Phone must be atleast 13 characters starting with +254 or +234",
             show:true,
             type:"warning"
         })
         return false
     }
-    if(!phone.startsWith("+254")){
+    if(!phone.startsWith("+254") && !phone.startsWith("+234")){
         changeErr({
             msg:"Phone must start with +254",
             show:true,
@@ -70,17 +70,17 @@ export const verifyCode = ({phone,code,changeErr})=>{
         })
         return false
     }
-    if(phone.length !== 13){
+    if(phone.length < 13){
         changeErr({
-            msg:"Phone must be 13 characters starting with +254",
+            msg:"Phone must be 13 characters starting with +254 or +234",
             show:true,
             type:"warning"
         })
         return false
     }
-    if(!phone.startsWith("+254")){
+    if(!phone.startsWith("+254") && !phone.startsWith("+234")){
         changeErr({
-            msg:"Phone must start with +254",
+            msg:"Phone must start with +254 or +234",
             show:true,
             type:"warning"
         })
