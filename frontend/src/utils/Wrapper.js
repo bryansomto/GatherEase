@@ -4,10 +4,6 @@ export const NavbarLinks = [
     link: "/",
   },
   {
-    text: "events",
-    link: "/events",
-  },
-  {
     text: "contact us",
     link: "/contacts",
   },

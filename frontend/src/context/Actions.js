@@ -1,4 +1,5 @@
-import { getCookie } from "./utils"
+import { getCookie} from "./utils"
+console.log(getCookie("_R_F"),getCookie("_D"))
 export const initialState = {
     user:null,
     login_error:{msg:"",show:false,type:""},
@@ -7,14 +8,16 @@ export const initialState = {
     login_redirect:false,
     register_redirect:false,
     code_redirect:false,
-    token:sessionStorage.getItem("token") || null,
-    role:sessionStorage.getItem("role") || null,
-    id:sessionStorage.getItem("id") || null,
+    token:getCookie("_A") || null,
+    refresh:getCookie("_R") || null,
+    role:getCookie("_R_F") || null,
+    id:getCookie("_D") || null,
 }
 export const actions = {
     SET_FORM_ERROR:"SET_FORM_ERROR",
     SET_FORM_DEFAULT:"SET_FORM_DEFAULT",
     SET_CURRENT_USER:"SET_CURRENT_USER",
     SETUP_USER:"SETUP_USER",
-    SET_REDIRECT:"SET_REDIRECT"
+    SET_REDIRECT:"SET_REDIRECT",
+    LOGOUT:"LOGOUT"
 }

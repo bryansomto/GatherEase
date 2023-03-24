@@ -9,7 +9,7 @@ const body = {
     password: "",
   };
 const Login = () => {
-  const {login_error,loginUser,setFormError,user} = useGlobally()
+  const {login_error,loginUser,setFormError,user,role,id} = useGlobally()
   const {type} = useParams()
   const navigate = useNavigate()
   let currentType = (type === "organizer") ? "organizer" : "user"
@@ -29,7 +29,7 @@ const Login = () => {
       setFormError("login", err)
     }
     useEffect(() => {
-      if(user){
+      if(role && id){
         changeErr({msg:"Loggin successful. Redirecting...",show:true,type:"success"})
         setTimeout(()=>navigate("/profile"), 3000)
       }

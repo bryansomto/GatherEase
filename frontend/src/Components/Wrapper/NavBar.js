@@ -6,9 +6,9 @@ import { NavbarLinks } from "../../utils/Wrapper";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useGlobally } from "../../context/AppContext";
 const NavBar = () => {
-  const {user} = useGlobally()
+  const {user,logout ,role, id} = useGlobally()
   const [open, setOpen] = useState(false)
-  let data = user
+  let data = role && id
 
   return (
     <Main open={open}>
@@ -27,12 +27,28 @@ const NavBar = () => {
           </NavLink>
         ))}
         {
-          data ? <NavLink
+          data && <NavLink
+          className={({ isActive }) => (isActive ? "active link" : "link")}
+          to="/events"
+        >
+        events
+      </NavLink>
+        }
+        {
+          data ? <>
+          <NavLink
           className={({ isActive }) => (isActive ? "active link" : "link")}
           to="/profile"
         >
         profile
-      </NavLink>: <NavLink
+      </NavLink>
+      <button
+      className="btn-logout"
+          onClick={logout}
+        >
+        logout
+      </button>
+          </>: <NavLink
           className={({ isActive }) => (isActive ? "active link" : "link")}
           to="/user/login"
         >
@@ -65,6 +81,9 @@ const Main = styled.nav`
     }
     .active {
       ${tw`text-white bg-newBlue md:bg-white md:text-newBlue`}
+    }
+    .btn-logout{
+      ${tw`text-black hover:text-newBlue`}
     }
   }
   .dropdown {

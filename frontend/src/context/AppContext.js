@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useReducer } from 'react'
 import { actions, initialState } from './Actions'
 import { reducer } from './Reducer'
-import {setCookie} from "./utils"
+import {setCookie,decodeRole,encodeRole,removeCookie} from "./utils"
 
 import axios from 'axios'
 const AppProvider = React.createContext()
@@ -9,7 +9,7 @@ const AppProvider = React.createContext()
 const AppContext = ({children}) => {
     const [state, dispatch] = useReducer(reducer,initialState)
     const client = axios.create({
-        baseURL:"http://gatherease.iankibandi.tech/api/v1",
+        baseURL:"https://gatherease.iankibandi.tech/api/v1",
         headers:{
             "x-auth-token":`${state.token}`
         }
@@ -33,25 +33,18 @@ const AppContext = ({children}) => {
         }
     }
 
-    const mapper = (role)=>{
-        const mapper = {
-            "ORGANIZER":process.env.REACT_APP_ORGANIZER,
-            "USER":process.env.REACT_APP_USER
-        }
-        return mapper[role]
+    
+    const setLocal = (token, refreshToken,role,id)=>{
+        setCookie("_A",token)
+        setCookie("_R",refreshToken)
+        setCookie("_R_F",encodeRole(role))
+        setCookie("_D",id)
     }
-    const mapperInvert = (role)=>{
-        const mapper = {
-            [process.env.REACT_APP_ORGANIZER]:"ORGANIZER",
-            [process.env.REACT_APP_USER]:"USER"
-        }
-        return mapper[role]
-    }
-    const setLocal = (token, role,id)=>{
-        
-        sessionStorage.setItem("token",token)
-        sessionStorage.setItem("role",mapper(role))
-        sessionStorage.setItem("id",id)
+    const defaultLocal = ()=>{
+    removeCookie("_A")
+    removeCookie("_R")
+    removeCookie("_R_F")
+        removeCookie("_D")
     }
     const setRedirect = (type,status)=>{
         dispatch({
@@ -83,13 +76,12 @@ const AppContext = ({children}) => {
         
         try {
             const {data} = await client.post(`${type}/login`,{email,password})
-            const {user,accessToken} = data
+            const {user,accessToken,refreshToken} = data
             dispatch({
                 type:actions.SETUP_USER,
-                payload:{user}
+                payload:{user,role:encodeRole(user.role), id:user.profile[`${type}Id`]}
             })
-            setLocal(accessToken,user.role,user.profile[`${type}Id`])
-          
+            setLocal(accessToken,refreshToken,user.role,user.profile[`${type}Id`])
             setRedirect(path,true)
         } catch (error) {
             setError(error, path, {msg:"",show:true,type:"warning"})
@@ -110,18 +102,26 @@ const AppContext = ({children}) => {
         }
     }
     const getCurrentUser = async ()=>{
-        setCookie("token","here")
-        const type = mapperInvert(state.role )
+        const type = decodeRole(state.role)
+        const mapper = {
+            "ORGANIZER":"organizer",
+            "USER":"user"
+        }
         try {
             const {data} = await client.get(`${type}/profile`)
-            console.log(data)
             dispatch({
                 type:actions.SETUP_USER,
-                payload:{user:data.data}
+                payload:{user:data.data,role:encodeRole(data.data.role), id:data.data.profile[`${mapper[type]}Id`]}
             })
         } catch (error) {
             console.log(error)
         }
+    }
+    const logout = ()=>{
+        defaultLocal()
+        dispatch({
+            type:actions.LOGOUT
+        })
     }
     useEffect(
         ()=>{
@@ -129,7 +129,7 @@ const AppContext = ({children}) => {
         },[]
     )
   return (
-    <AppProvider.Provider value={{...state,createUser,setFormError,loginUser,confirmUser,getCurrentUser}}>
+    <AppProvider.Provider value={{...state,createUser,setFormError,loginUser,confirmUser,getCurrentUser,logout }}>
         {children}
     </AppProvider.Provider>
   )

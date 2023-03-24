@@ -13,12 +13,15 @@ export const reducer = (state,action) =>{
             return {...state, [`${type}_error`]:error}
         }
         case actions.SETUP_USER:{
-            const {user} = action.payload
-            return {...state, user}
+            const {user,role,id} = action.payload
+            return {...state, user, role, id}
         }
         case actions.SET_REDIRECT:{
             const {type,status} = action.payload
             return {...state, [`${type}_redirect`]:status}
+        }
+        case actions.LOGOUT:{
+            return {...state, token:null,refresh:null,role:null,id:null}
         }
         default:{
             return state

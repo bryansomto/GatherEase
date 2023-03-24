@@ -5,8 +5,8 @@ import tw from "twin.macro";
 import { useGlobally } from "../../context/AppContext";
 import { FooterAccount,FooterLoginAccount, FooterSocial, FooterEvents } from "../../utils/Wrapper";
 const Footer = () => {
-  const {user}= useGlobally()
-  let data = (!user) ? FooterAccount : FooterLoginAccount 
+  const {role , id}= useGlobally()
+  let data = (!role || !id) ? FooterAccount : FooterLoginAccount 
   return (
     <Main>
       <div className="links">
