@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Venue" ALTER COLUMN "imageUrl" SET DATA TYPE TEXT;

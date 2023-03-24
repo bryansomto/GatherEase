@@ -1,7 +1,0 @@
-# bide modules
-node_modules
-
-#built tsc files
-dist
-
-npm-debug.log
