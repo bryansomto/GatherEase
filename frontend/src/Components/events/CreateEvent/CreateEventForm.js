@@ -4,6 +4,7 @@ import tw from "twin.macro";
 import { Form } from "../styles";
 import {ContentHeader} from "../../all/headers/ContentHeader"
 import moment from "moment";
+import { useEvents } from "../context/EventContext";
 const body = {
   venueId: "",
   categoryId: "",
@@ -13,16 +14,21 @@ const body = {
 };
 const CreateEventForm = () => {
   const [data, setData] = useState(body);
+  const {createEvents} = useEvents()
   const [category, setCategory] = useState(["Cloned","Done","undo"])
   const [venues, setVenues] = useState({})
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
+  const handleSubmit = (e)=>{
+    e.preventDefault()
+    createEvents()
+  }
   return (
     <Main>
         <ContentHeader url="/events" title="create event" text="all events"/>
-      <Form>
+      <Form onSubmit={(e)=>handleSubmit(e)}>
         <div className="input">
           <label htmlFor="venueId"> Venue </label>
           <input

@@ -4,13 +4,17 @@ import { useGlobally } from '../context/AppContext'
 import { NavBar, Footer } from "../Components/Wrapper/index";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { EventContext } from '../Components/events/context/EventContext';
+
 const ProtectedRoutes = () => {
+
   const {id,role} = useGlobally()
     if(!id || !role ){
         return <Navigate to="/"/>
     }
 
   return (
+    <EventContext>
     <Main>
       <NavBar />
       <div className="all">
@@ -18,6 +22,7 @@ const ProtectedRoutes = () => {
       </div>
       <Footer />
     </Main>
+    </EventContext>
   );
 };
 

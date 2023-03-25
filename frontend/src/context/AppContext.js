@@ -9,7 +9,7 @@ const AppProvider = React.createContext()
 const AppContext = ({children}) => {
     const [state, dispatch] = useReducer(reducer,initialState)
     const client = axios.create({
-        baseURL:"https://gatherease.iankibandi.tech/api/v1",
+        baseURL: process.env.REACT_APP_BASE_URL,
         headers:{
             "x-auth-token":`${state.token}`
         }
@@ -102,16 +102,16 @@ const AppContext = ({children}) => {
         }
     }
     const getCurrentUser = async ()=>{
-        const type = decodeRole(state.role)
         const mapper = {
             "ORGANIZER":"organizer",
             "USER":"user"
         }
+        const type = mapper[decodeRole(state.role)]
         try {
             const {data} = await client.get(`${type}/profile`)
             dispatch({
                 type:actions.SETUP_USER,
-                payload:{user:data.data,role:encodeRole(data.data.role), id:data.data.profile[`${mapper[type]}Id`]}
+                payload:{user:data.data,role:encodeRole(data.data.role), id:data.data.profile[`${type}Id`]}
             })
         } catch (error) {
             console.log(error)
