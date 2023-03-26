@@ -20,6 +20,10 @@ export const Form = styled.form`
     label {
       font-family: PoppinsSemiBold;
       ${tw`text-[rgba(0,0,0,.7)] capitalize text-sm`}
+      #count{
+        font-family:DmSansRegular;
+        ${tw`text-sm rounded-lg text-xs text-newBlue pl-2`}
+      }
     }
     select, textarea,
     input {

@@ -12,7 +12,7 @@ export const Recent = styled.div`
     .image-div{
       ${tw`pt-10 w-full flex items-center space-y-5 flex-col justify-start`}
       >img{
-        ${tw`max-w-[300px]`}
+        ${tw`max-w-[300px] max-h-[200px]`}
       } 
       >p{
         ${tw`text-sm`}

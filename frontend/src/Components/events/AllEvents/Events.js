@@ -1,13 +1,15 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
 import {Event} from "../../all/cards/Event"
 import {Main} from "../../styles.js"
 import { ContentHeader } from '../../all/headers/ContentHeader'
 import { eventData } from '../../utils/Events'
+import { useEvents } from '../context/EventContext'
 const Events = () => {
   const [body, setBody] = useState({budget:{},city:"",country:""})
   const [sort, setSort] = useState({arrange:"",sort:""})
+  const {getEvents,events}=useEvents()
   const handleChange = (e)=>{
     const {value, name} = e.target
     if(name === 'budget'){
@@ -20,6 +22,9 @@ const Events = () => {
     const {value, name} = e.target
     setSort({...sort, [name]:value})
   }
+  useEffect(()=>{
+    getEvents()
+  },[])
   return (
     <Main>
       <FlexDiv>
@@ -56,7 +61,7 @@ const Events = () => {
       <ContentHeader url="/events/add" title="events" text="add event"/>
       <GridCol>
       {
-        eventData.map(
+        events.data.map(
           (item, index)=><Event key={index} index={index} {...item}/>
         )
       }
@@ -110,5 +115,5 @@ ${tw`w-full flex flex-col lg:flex-row space-y-5 lg:space-y-0 items-start lg:just
 }
 `
 const GridCol = styled.div`
-${tw`grid grid-cols-[repeat(auto-fit, minmax(230px, 1fr))] md:grid-cols-[repeat(auto-fit, minmax(400px, 1fr))] gap-5`}
+${tw`w-full grid grid-cols-[repeat(auto-fit, minmax(230px, 1fr))] md:grid-cols-[repeat(auto-fit, minmax(500px, 1fr))] gap-5`}
 `
