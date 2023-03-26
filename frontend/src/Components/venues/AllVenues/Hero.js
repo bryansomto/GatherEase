@@ -1,9 +1,9 @@
 import React from 'react'
 import {DisplayImage} from "../../all/DisplayImage"
-import events from "../../../Assets/img/events.jpg"
+import venues from "../../../Assets/img/venues.jpg"
 const Hero = () => {
   return (
-    <DisplayImage image={events} text="Start planning your events today"/>
+    <DisplayImage image={venues} text="Here are some venues to have events on"/>
   )
 }
 

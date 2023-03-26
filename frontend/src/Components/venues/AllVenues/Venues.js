@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Venue } from "../../all/cards/Venue";
 import { Main } from "../../styles.js";
-// import { ContentHeader } from "../../all/headers/ContentHeader";
+import { ContentHeader } from "../../all/headers/ContentHeader";
 import { venuesData } from "../../utils/Venues";
+import { useEvents } from "../../events/context/EventContext";
+import { Loader } from "../../all/load/Loader";
+import { NoData } from "../../all/error/NoData";
 const Venues = () => {
-  const [body, setBody] = useState({ budget: {}, city: "", country: "" });
-  const [sort, setSort] = useState({ arrange: "", sort: "" });
+  const [body, setBody] = useState({city: "", name: "" });
+  const [send, setSend] = useState(false)
+  const {getVenues, venues} = useEvents()
   const handleChange = (e) => {
     const { value, name } = e.target;
-    if (name === "budget") {
-      setBody({ ...body, [name]: JSON.parse(value) });
-    } else {
       setBody({ ...body, [name]: value });
-    }
   };
-  const changeSort = (e) => {
-    const { value, name } = e.target;
-    setSort({ ...sort, [name]: value });
-  };
+  useEffect(()=>{
+    getVenues(body)
+  },[send])
   return (
     <Main>
       <FlexDiv>
@@ -34,56 +33,27 @@ const Venues = () => {
             />
             <input
               type="text"
-              placeholder="Country"
-              name="country"
-              value={body.country}
+              placeholder="Name"
+              name="name"
+              value={body.name}
               onChange={(e) => handleChange(e)}
             />
+            <div>
+              <button onClick={()=>setSend(!send)}>Search</button>
+            </div>
           </div>
-          <div>
-            <select
-              name="budget"
-              value={JSON.stringify(body.budget)}
-              onChange={(e) => handleChange(e)}
-            >
-              <option value={"{}"} disabled={true}>
-                Budget
-              </option>
-              <option value={'{"min":0,"max":10000}'}>0-10000</option>
-              <option value={'{"min":10000,"max":20000}'}>10000-20000</option>
-              <option value={'{"min":20000,"max":30000}'}>20000-30000</option>
-              <option value={'{"min":30000,"max":40000}'}>30000-40000</option>
-              <option value={'{"min":40000,"max":50000}'}>40000-50000</option>
-            </select>
-            <button>Search</button>
-          </div>
-        </div>
-        <div className="sort">
-          <select
-            name="arrange"
-            value={sort.arrange}
-            onChange={(e) => changeSort(e)}
-          >
-            <option value={"{}"} disabled={true}>
-              direction
-            </option>
-            <option value={"asc"}>Asc</option>
-            <option value={"desc"}>Desc</option>
-          </select>
-          <select name="sort" value={sort.sort} onChange={(e) => changeSort(e)}>
-            <option value={""} disabled={true}>
-              Sort By
-            </option>
-            <option value={"createdAt"}>Created at</option>
-            <option value={"updatedAt"}>Updated at</option>
-          </select>
         </div>
       </FlexDiv>
-      {/* <ContentHeader url="/events/add" title="events" text="add event" /> */}
+      <ContentHeader title="Venues" url="/events" text="all events"/>
       <GridCol>
-        {venuesData.map((item, index) => (
+        {
+          venues.loading ? <Loader/> :<>
+          {venues.data.length === 0 ? <NoData text="No venues yet"/>: venues.data.map((item, index) => (
           <Venue key={index} index={index} {...item} />
         ))}
+          </>
+        }
+        
       </GridCol>
       <Div>
         <button>previous</button>

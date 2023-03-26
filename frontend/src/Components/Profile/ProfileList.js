@@ -1,7 +1,68 @@
+import moment from "moment";
 import styled from "styled-components";
 import tw from "twin.macro";
 
-export const ProfileList = ({phone,firstName,lastName,email,role,profile}) => {
+export const ProfileList = ({phone,firstName,lastName,email,role,profile={},createdAt="",lastLogin=""}) => {
+  if(role === "USER"){
+    return <Main>
+    <div>
+      <div>
+        <p>First Name</p>
+      </div>
+      <div>
+        <p>{firstName}</p>
+      </div>
+    </div>
+    <div>
+      <div>
+        <p>Surname</p>
+      </div>
+      <div>
+        <p>{lastName}</p>
+      </div>
+    </div>
+    <div>
+      <div>
+        <p>Email</p>
+      </div>
+      <div>
+        <p>{email}</p>
+      </div>
+    </div>
+    <div>
+      <div>
+          <p>Phone</p>
+      </div>
+      <div>
+          <p>{phone}</p>
+      </div>
+    </div>
+    <div>
+      <div>
+          <p>Role</p>
+      </div>
+      <div>
+          <p>{role === "ORGANIZER"?"Organizer":"User"}</p>
+      </div>
+    </div>
+    <div>
+      <div>
+          <p>Last Login</p>
+      </div>
+      <div>
+          <p>{moment(new Date(lastLogin)).format("dddd, MMM D YYYY")}</p>
+      </div>
+    </div>
+    <div>
+      <div>
+          <p>created At</p>
+      </div>
+      <div>
+          <p>{moment(new Date(createdAt)).format("dddd, MMM D YYYY")}</p>
+      </div>
+    </div>
+  </Main>
+  }
   return (
     <Main>
       <div>

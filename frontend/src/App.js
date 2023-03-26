@@ -14,7 +14,7 @@ import {
   UpdateEvent,
   CreateEvent,
 } from "./Pages/events/index";
-import { AllVenues } from "./Pages/venues/index";
+import { AllVenues,SingleVenue } from "./Pages/venues/index";
 import {
   Home,
   ContactUs,
@@ -23,6 +23,7 @@ import {
   Wrapper,
   ProtectedRoutes,
 } from "./Pages/index";
+import { VenueSingle } from "./Components/all/frames/VenueSingle";
 export const App = () => {
   return (
     <BrowserRouter>
@@ -41,6 +42,7 @@ export const App = () => {
           <Route path="profile" element={<Profile />} />
           <Route path="Profile/update" element={<UpdateUser />} />
           <Route path="venues" element={<AllVenues />} />
+          <Route path="venues/:venueId" element={<SingleVenue/>}/>
         </Route>
         <Route path=":type/login" element={<Login />} />
         <Route path=":type/signup" element={<SignUp />} />

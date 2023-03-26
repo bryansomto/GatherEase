@@ -10,12 +10,13 @@ import { Loader } from '../all/load/Loader';
 import { NoData } from '../all/error/NoData';
 const ProfileEvents = () => {
     const [body, setBody] = useState({})
-    const {id} = useGlobally()
+    const {id,role} = useGlobally()
     const {getUserEvents,usersEvents} = useEvents()
     const handleChange = (e)=>{
         const {value, name} = e.target
         setBody({...body, [name]:value})
     }
+    const organizer = role === process.env.REACT_APP_ORGANIZER
     useEffect(()=>{getUserEvents(id)},[])
     return (
       <Main>
@@ -27,7 +28,9 @@ const ProfileEvents = () => {
                 search
             </button>
         </div>
-        <ContentHeader title="events" url="/events/add" text="add event"/>
+        {
+          <ContentHeader title="events" url="/events/add" text="add event"/>
+        }
           <div className='events'>
           {
             usersEvents.loading?

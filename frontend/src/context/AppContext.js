@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useReducer } from "react";
 import { actions, initialState } from "./Actions";
 import { reducer } from "./Reducer";
-import { setCookie, decodeRole, encodeRole, removeCookie } from "./utils";
+import { setCookie, decodeRole, encodeRole, removeCookie, getCookie } from "./utils";
 
 import axios from "axios";
 const AppProvider = React.createContext();
@@ -13,6 +13,9 @@ const AppContext = ({ children }) => {
     headers: {
       "x-auth-token": `${state.token}`,
     },
+  });
+  client.interceptors.response.use((response)=>response, function (error) {
+    return Promise.reject(error);
   });
   //----- utils -----------------------------------
   const closeGlobal = ()=>{
@@ -85,7 +88,6 @@ const AppContext = ({ children }) => {
         email,
         password,
       });
-      console.log(data);
       setFormError(path, {
         msg: "Redirecting to confirm registration...",
         show: true,
@@ -104,16 +106,27 @@ const AppContext = ({ children }) => {
     try {
       const { data } = await client.post(`${type}/login`, { email, password });
       const { user, accessToken, refreshToken } = data;
-      console.log(data)
-      dispatch({
-        type: actions.SETUP_USER,
-        payload: {
-          user,
-          role: encodeRole(user.role),
-          id: user?.profile[`${type}Id`],
-        },
-      });
-      setLocal(accessToken, refreshToken, user.role, user?.profile[`${type}Id`]);
+      if(type === "user"){
+        dispatch({
+          type: actions.SETUP_USER,
+          payload: {
+            user,
+            role: encodeRole(user.role),
+            id: user.id,
+          },
+        });
+        setLocal(accessToken, refreshToken, user.role, user?.id);
+      }else{
+        dispatch({
+          type: actions.SETUP_USER,
+          payload: {
+            user,
+            role: encodeRole(user.role),
+            id: user?.profile[`${type}Id`],
+          },
+        });
+        setLocal(accessToken, refreshToken, user.role, user?.profile[`${type}Id`]);
+      }
       setRedirect(path, true);
     } catch (error) {
       setError(error, path, { msg: "", show: true, type: "warning" });
@@ -128,7 +141,6 @@ const AppContext = ({ children }) => {
         phone,
         code,
       });
-      console.log(data);
       setFormError(path, {
         msg: "Confirmed registration. Redirecting...",
         show: true,
@@ -140,6 +152,18 @@ const AppContext = ({ children }) => {
       console.log(error);
     }
   };
+  const getEventsAttended = async ()=>{
+    dispatch({type:actions.SET_EVENTS_ATTENDED_DEFAULT})
+    try {
+      const { data } = await client.get(`user/profile`);
+      dispatch({
+        type:actions.SET_EVENTS_ATTENDED,
+        payload:{events:data.data.eventsAttended}
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const getCurrentUser = async () => {
     const mapper = {
       ORGANIZER: "organizer",
@@ -148,14 +172,25 @@ const AppContext = ({ children }) => {
     const type = mapper[decodeRole(state.role)];
     try {
       const { data } = await client.get(`${type}/profile`);
-      dispatch({
-        type: actions.SETUP_USER,
-        payload: {
-          user: data.data,
-          role: encodeRole(data.data.role),
-          id: data.data.profile[`${type}Id`],
-        },
-      });
+      if(type === "user"){
+        dispatch({
+          type: actions.SETUP_USER,
+          payload: {
+            user: data.data,
+            role: encodeRole(data.data.role),
+            id: data.data.id,
+          },
+        });
+      }else{
+        dispatch({
+          type: actions.SETUP_USER,
+          payload: {
+            user: data.data,
+            role: encodeRole(data.data.role),
+            id: data.data.profile[`${type}Id`],
+          },
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -179,7 +214,8 @@ const AppContext = ({ children }) => {
         confirmUser,
         getCurrentUser,
         logout,
-        setGlobalErr
+        setGlobalErr,
+        getEventsAttended 
       }}
     >
       {children}

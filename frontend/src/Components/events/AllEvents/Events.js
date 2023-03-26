@@ -8,10 +8,12 @@ import noevents from "../../../Assets/svg/events.svg"
 import {Loader} from "../../all/load/Loader"
 import { NoData } from '../../all/error/NoData'
 import { useEvents } from '../context/EventContext'
+import { useGlobally } from '../../../context/AppContext'
 const Events = () => {
-  const [body, setBody] = useState({budget:{},city:"",country:""})
-  const [sort, setSort] = useState({arrange:"",sort:""})
+  const [body, setBody] = useState({city:"",category:"",venue:"",startDate:"",endDate:""})
+  const [send,setSend] = useState(false)
   const {getEvents,events}=useEvents()
+  const {role} = useGlobally()
   const handleChange = (e)=>{
     const {value, name} = e.target
     if(name === 'budget'){
@@ -20,47 +22,33 @@ const Events = () => {
       setBody({...body, [name]:value})
     }
   }
-  const changeSort = (e)=>{
-    const {value, name} = e.target
-    setSort({...sort, [name]:value})
-  }
+  const verify = role === process.env.REACT_APP_ORGANIZER
   useEffect(()=>{
-    getEvents()
-  },[])
+    getEvents(body)
+  },[send])
   return (
     <Main>
       <FlexDiv>
         <div className="filter">
           <div>
         <input type="text" placeholder="City" name="city" value={body.city} onChange={(e)=>handleChange(e)}/>
-        <input type="text" placeholder="Country" name="country" value={body.country} onChange={(e)=>handleChange(e)}/>
-          </div>
+        <input type="text" placeholder="Category" name="category" value={body.category} onChange={(e)=>handleChange(e)}/>
+        <input type="text" placeholder="Venue" name="venue" value={body.venue} onChange={(e)=>handleChange(e)}/>
+        </div>
         <div>
-        <select name="budget" value={JSON.stringify(body.budget)} onChange={(e)=>handleChange(e)}>
-        <option value={'{}'} disabled={true}>Budget</option>
-          <option value={'{"min":0,"max":10000}'}>0-10000</option>
-          <option value={'{"min":10000,"max":20000}'}>10000-20000</option>
-          <option value={'{"min":20000,"max":30000}'}>20000-30000</option>
-          <option value={'{"min":30000,"max":40000}'}>30000-40000</option>
-          <option value={'{"min":40000,"max":50000}'}>40000-50000</option>
-        </select>
-        <button>Search</button>
+        <input type="date" name="startDate" value={body.startDate} onChange={(e)=>handleChange(e)}/>
+        <input type="date" name="endDate" value={body.endDate} onChange={(e)=>handleChange(e)}/>
+        <button onClick={()=>setSend(!send)}>Search</button>
         </div>
-        </div>
-        <div className="sort">
-        <select name="arrange" value={sort.arrange} onChange={(e)=>changeSort(e)}>
-        <option value={'{}'} disabled={true}>direction</option>
-          <option value={'asc'}>Asc</option>
-          <option value={'desc'}>Desc</option>
-        </select>
-        <select name="sort" value={sort.sort} onChange={(e)=>changeSort(e)}>
-        <option value={''} disabled={true}>Sort By</option>
-          <option value={'createdAt'}>Created at</option>
-          <option value={'updatedAt'}>Updated at</option>
-        </select>
         </div>
       </FlexDiv>
-      <ContentHeader url="/events/add" title="events" text="add event"/>
+      {
+        verify?
+        
+        <ContentHeader url="/events/add" title="events" text="add event"/>
+        :
+        <ContentHeader url="/venues" title="events" text="all venues"/>
+      }
       <GridCol>
       { events.loading ?<Loader/>:<>{
         events.data.length === 0?

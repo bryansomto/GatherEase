@@ -1,21 +1,19 @@
-import guest from "../../Assets/img/guests.jpg";
-import venue from "../../Assets/img/venue.jpg";
-import budget from "../../Assets/img/budget.jpg";
+
 export const servicesData = [
   {
     title: "Budget Management",
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis felis convallis, rhoncus leo id, scelerisque purus. Ut auctor gravida nulla.",
-    img: budget,
+    img: "https://res.cloudinary.com/oryankibandi/image/upload/v1679780645/events/clfjkkjny0008s21z07tcy7ut/f5b3973dd6614e5ba79182a145e93f661679780644713.jpg",
   },
   {
     title: "Guest list Management",
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis felis convallis, rhoncus leo id, scelerisque purus. Ut auctor gravida nulla.",
-    img: guest,
+    img: "https://res.cloudinary.com/oryankibandi/image/upload/v1679747628/events/clfjkkjny0008s21z07tcy7ut/20486c95765349e18803e946f1ca50831679747628138.jpg",
   },
   {
     title: "Venue Selection",
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis felis convallis, rhoncus leo id, scelerisque purus. Ut auctor gravida nulla.",
-    img: venue,
+    img: "https://res.cloudinary.com/oryankibandi/image/upload/v1679834376/events/clfjkkjny0008s21z07tcy7ut/35b686127a144919ba34f5656c4086e81679834376515.jpg",
   },
 ];
 

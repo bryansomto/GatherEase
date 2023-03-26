@@ -50,6 +50,19 @@ export const reducer = (state,action)=>{
             const {guests} = action.payload
             return {...state,  guests:{data:guests,loading:false}}
         }
+        case actions.SET_VENUES_DEFAULT:{
+            return {...state,  venues:{...state.venues, loading:true}}
+        }
+        case actions.SET_CURRENT_VENUE:{
+            const {venue} = action.payload
+            return {...state,  currentVenue:{data:venue, loading:false}}
+        }
+        case actions.SET_CURRENT_VENUE_DEFAULT:{
+            return {...state,  currentVenue:{data:[], loading:true}}
+        }
+        case actions.SET_EVENTS_DEFAULT:{
+            return {...state,  events:{data:[],page:0,totalPages:0, loading:true}}
+        }
         default:{
             throw new Error(`No such action as ${action.type}`)
         }

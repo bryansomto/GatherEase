@@ -1,25 +1,26 @@
 import React, { useEffect,useState } from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
-import { guests } from '../../utils/Events'
 import {ContentHeader} from "../../all/headers/ContentHeader"
 import { useParams } from 'react-router-dom'
 import { useEvents } from '../context/EventContext'
 import { Loader } from '../../all/load/Loader'
-import { useGlobally } from '../../../context/AppContext'
+
+
 const Guests = () => {
     const {eventId} = useParams()
-    const {getGuests, guests } = useEvents()
-    const {setGlobalErr} = useGlobally()
+    const {getGuests, guests ,currentEvent} = useEvents()
     useEffect(()=>{
         getGuests(eventId)
     },[eventId])
     if(guests.loading){
-        <Main>
+        return <Main>
              <ContentHeader url={`/events/${eventId}`} title="guests" text="view event"/>
              <Loader/>
         </Main>
     }
+    const expired = new Date(currentEvent.data.date) - new Date()
+    const alreadyExpired = expired <= 24 * 60 * 60 * 1000
   return (
     <Main>
         <ContentHeader url={`/events/${eventId}`} title="guests" text="view event"/>
@@ -41,12 +42,14 @@ const Guests = () => {
                         </td>
                         </tr>
                     : guests.data.map((item)=>{
-                        const {email,name} = item
-                        return <tr key={name}>
+                        const {email,lastName,firstName} = item.user
+                        return <tr key={lastName}>
+                        <td>{`${firstName} ${lastName}`}</td>
                         <td>{email}</td>
-                        <td>{name}</td>
                         <td className='actions'>
-                            <button className='remove'>remove</button>
+                            {
+                            alreadyExpired&&<button className='remove'>attended</button>
+                            }
                             <button className='view'>view</button>
                         </td>
                         </tr>

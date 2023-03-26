@@ -10,10 +10,12 @@ export const initialState = {
   update_error:{msg:"",show:false,type:""},
   category:{data:[],loading:true},
   venues:{data:[],loading:true},
+  currentVenue:{data:{}, loading:true},
   guests:{data:[],loading:true}
 };
 export const actions = {
   GET_EVENTS: "GET_EVENTS",
+  SET_EVENTS_DEFAULT:"SET_EVENTS_DEFAULT",
   ADD_EVENT: "GET_EVENT",
   DELETE_EVENTS: "DELETE_EVENTS",
   UPDATE_EVENT: "UPDATE_EVENT",
@@ -27,5 +29,8 @@ export const actions = {
   SET_CURRENT_EVENT:"SET_CURRENT_EVENT",
   SET_CURRENT_EVENT_DEFAULT:"SET_CURRENT_EVENT_DEFAULT",
   GET_ORGANIZER:"GET_ORGANIZER",
-  GET_GUESTS:"GET_GUESTS"
+  GET_GUESTS:"GET_GUESTS",
+  SET_VENUES_DEFAULT:"SET_VENUES_DEFAULT",
+  SET_CURRENT_VENUE:"SET_CURRENT_VENUE",
+  SET_CURRENT_VENUE_DEFAULT:"SET_CURRENT_VENUE_DEFAULT"
 };

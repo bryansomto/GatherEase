@@ -3,11 +3,17 @@ import ProfileEvents from './ProfileEvents'
 import ProfileData from "./ProfileData"
 import styled from 'styled-components'
 import tw from 'twin.macro'
+import { useGlobally } from '../../context/AppContext'
+import { AttendedEvents } from './AttendedEvents'
 const Wrapper = () => {
+  const {role} = useGlobally()
+  const organizer = role === process.env.REACT_APP_ORGANIZER
   return (
     <Main>
         <ProfileData/>
-        <ProfileEvents/>
+        {
+       (organizer)?<ProfileEvents/>:<AttendedEvents/>
+        }
     </Main>
   )
 }

@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { useTextMore } from "../../hooks/useText";
 import { Link } from "react-router-dom";
 import tw from "twin.macro";
-export const Venue = ({ image, location, description, index }) => {
+
+export const Venue = ({ imageUrl, name,id ,city,country,street}) => {
   return (
     <Main>
-      <Link to={`/venues/${index}`}>
-        <img className="venue-image" src={image} alt={location} />
+      <Link to={`/venues/${id}`}>
+        <img className="venue-image" src={imageUrl} alt={name} />
       </Link>
-      <header className="font">{location}</header>
-      <p>{useTextMore(description)}</p>
+      <header className="font">{name}</header>
+      <p>{`${city}, ${country} on street ${street}`}</p>
     </Main>
   );
 };

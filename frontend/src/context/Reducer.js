@@ -31,6 +31,13 @@ export const reducer = (state,action) =>{
             const err = {msg:"",show:false,type:""}
             return {...state, global_err:err}
         }
+        case actions.SET_EVENTS_ATTENDED:{
+            const {events} = action.payload
+            return {...state, eventAttended:{data:events, loading:false}}
+        }
+        case actions.SET_EVENTS_ATTENDED_DEFAULT:{
+            return {...state, eventAttended:{data:[], loading:true}}
+        }
         default:{
             return state
         }
