@@ -4,7 +4,9 @@ import tw from 'twin.macro'
 import {Event} from "../../all/cards/Event"
 import {Main} from "../../styles.js"
 import { ContentHeader } from '../../all/headers/ContentHeader'
-import { eventData } from '../../utils/Events'
+import noevents from "../../../Assets/svg/events.svg"
+import {Loader} from "../../all/load/Loader"
+import { NoData } from '../../all/error/NoData'
 import { useEvents } from '../context/EventContext'
 const Events = () => {
   const [body, setBody] = useState({budget:{},city:"",country:""})
@@ -60,10 +62,15 @@ const Events = () => {
       </FlexDiv>
       <ContentHeader url="/events/add" title="events" text="add event"/>
       <GridCol>
-      {
+      { events.loading ?<Loader/>:<>{
+        events.data.length === 0?
+        <NoData/>
+        :
         events.data.map(
           (item, index)=><Event key={index} index={index} {...item}/>
         )
+      }
+      </>
       }
       </GridCol>
       <Div>

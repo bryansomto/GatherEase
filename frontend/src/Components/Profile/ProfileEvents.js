@@ -1,16 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { eventData} from "../utils/Events"
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { ContentHeader } from '../all/headers/ContentHeader';
 import { useGlobally } from '../../context/AppContext';
 import {Event} from "../all/cards/Event" 
+import { useEvents } from '../events/context/EventContext';
+import { Loader } from '../all/load/Loader';
+import { NoData } from '../all/error/NoData';
 const ProfileEvents = () => {
     const [body, setBody] = useState({})
+    const {id} = useGlobally()
+    const {getUserEvents,usersEvents} = useEvents()
     const handleChange = (e)=>{
         const {value, name} = e.target
         setBody({...body, [name]:value})
     }
+    useEffect(()=>{getUserEvents(id)},[])
     return (
       <Main>
         <div className='header'>
@@ -24,9 +30,16 @@ const ProfileEvents = () => {
         <ContentHeader title="events" url="/events/add" text="add event"/>
           <div className='events'>
           {
-        eventData.map(
-          (item, index)=><Event key={index} index={index} {...item}/>
-        )
+            usersEvents.loading?
+            <Loader/>
+            :<>
+            { usersEvents.data.length === 0 ?
+            <NoData text="You seem to have not created events yet"/>
+            :usersEvents.data.map(
+                (item, index)=><Event key={index} index={index} {...item}/>
+              )
+            }
+            </>
       }
           </div>
           <div className='pages'>

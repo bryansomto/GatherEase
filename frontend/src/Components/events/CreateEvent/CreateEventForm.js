@@ -14,9 +14,9 @@ const body = {
   venueId: "",
   categoryId: "",
   isPublic: true,
-  day: "",
-  time: moment(new Date()).format("LTS"),
-  imageUrl: moment(new Date()).format("YYYY-MM-DD"),
+  day: moment(new Date()).format("YYYY-MM-DD"),
+  time: moment(new Date()).format("HH:mm:ss"),
+  imageUrl: "",
   title:"",
   description:"",
   city:""
@@ -116,6 +116,7 @@ const changeErr = (err)=>{
             type="time"
             name="time"
             value={data.time}
+            
             onChange={(e) => handleChange(e)}
           />
         </div>
@@ -125,6 +126,7 @@ const changeErr = (err)=>{
             type="date"
             name="day"
             value={data.day}
+            min={moment(new Date()).format("YYYY-MM-DD")} 
             onChange={(e) => handleChange(e)}
           />
         </div>
@@ -138,8 +140,10 @@ const changeErr = (err)=>{
             onChange={(e) => handleChange(e)}
           />
         </div>
-        <div className="submit">
-          <input type="submit" value="Create event"/>
+        <div className="submit" style={{justifyItems:"end"}}>
+          <button type="submit">
+          Create event
+          </button>
         </div>
       </Form>
     </Main>

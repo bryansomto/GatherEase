@@ -15,6 +15,18 @@ const AppContext = ({ children }) => {
     },
   });
   //----- utils -----------------------------------
+  const closeGlobal = ()=>{
+    dispatch({
+      type:actions.SET_GLOBAL_ERROR_DEFAULTS,
+    })
+  }
+  const setGlobalErr = (err)=>{
+    dispatch({
+      type:actions.SET_GLOBAL_ERROR,
+      payload:{err}
+    })
+    setTimeout(()=>closeGlobal(),3000)
+  }
   const setFormError = (type, error) => {
     dispatch({
       type: actions.SET_FORM_ERROR,
@@ -30,7 +42,7 @@ const AppContext = ({ children }) => {
     );
   };
   const setError = (error, type, err) => {
-    if (error.response.data) {
+    if (error?.response?.data) {
       setFormError(type, { ...err, msg: error.response.data.message });
     }
   };
@@ -92,15 +104,16 @@ const AppContext = ({ children }) => {
     try {
       const { data } = await client.post(`${type}/login`, { email, password });
       const { user, accessToken, refreshToken } = data;
+      console.log(data)
       dispatch({
         type: actions.SETUP_USER,
         payload: {
           user,
           role: encodeRole(user.role),
-          id: user.profile[`${type}Id`],
+          id: user?.profile[`${type}Id`],
         },
       });
-      setLocal(accessToken, refreshToken, user.role, user.profile[`${type}Id`]);
+      setLocal(accessToken, refreshToken, user.role, user?.profile[`${type}Id`]);
       setRedirect(path, true);
     } catch (error) {
       setError(error, path, { msg: "", show: true, type: "warning" });
@@ -166,6 +179,7 @@ const AppContext = ({ children }) => {
         confirmUser,
         getCurrentUser,
         logout,
+        setGlobalErr
       }}
     >
       {children}

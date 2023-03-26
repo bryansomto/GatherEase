@@ -4,9 +4,9 @@ import tw from 'twin.macro'
 import { useEvents } from '../context/EventContext'
 import {BiLoaderAlt} from "react-icons/bi"
 
-export const Venues = ({handleChildren}) => {
+export const Venues = ({handleChildren, value=""}) => {
     const {venues,getVenues} = useEvents()
-    const [active, setActive] = useState("")
+    const [active, setActive] = useState(value)
     const handleClick = (value,id)=>{
         setActive(value)
         handleChildren("venueId",id)

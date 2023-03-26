@@ -4,9 +4,9 @@ import tw from 'twin.macro'
 import { useEvents } from '../context/EventContext'
 import { BiLoaderAlt } from 'react-icons/bi'
 
-export const Categories = ({handleChildren}) => {
+export const Categories = ({handleChildren, value=""}) => {
     const {category,getCategories} = useEvents()
-    const [active, setActive] = useState("")
+    const [active, setActive] = useState(value)
     const handleClick = (value,id)=>{
         setActive(value)
         handleChildren("categoryId",id)

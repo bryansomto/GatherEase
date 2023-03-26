@@ -4,16 +4,22 @@ import tw from 'twin.macro'
 import { guests } from '../../utils/Events'
 import {ContentHeader} from "../../all/headers/ContentHeader"
 import { useParams } from 'react-router-dom'
+import { useEvents } from '../context/EventContext'
+import { Loader } from '../../all/load/Loader'
+import { useGlobally } from '../../../context/AppContext'
 const Guests = () => {
     const {eventId} = useParams()
-
-    const [data, setData] = useState(guests[Number(eventId)])
-    const handleChange = ()=>{
-        setData(guests[Number(eventId)])
-    }
+    const {getGuests, guests } = useEvents()
+    const {setGlobalErr} = useGlobally()
     useEffect(()=>{
-        handleChange()
+        getGuests(eventId)
     },[eventId])
+    if(guests.loading){
+        <Main>
+             <ContentHeader url={`/events/${eventId}`} title="guests" text="view event"/>
+             <Loader/>
+        </Main>
+    }
   return (
     <Main>
         <ContentHeader url={`/events/${eventId}`} title="guests" text="view event"/>
@@ -27,14 +33,14 @@ const Guests = () => {
             </thead>
             <tbody>
                 {
-                    data.length === 0?
+                   guests.data.length === 0?
                             <tr>
                         <td colSpan={3} style={{textAlign:"center"}}>
 
                         No guests yet
                         </td>
                         </tr>
-                    : data.map((item)=>{
+                    : guests.data.map((item)=>{
                         const {email,name} = item
                         return <tr key={name}>
                         <td>{email}</td>

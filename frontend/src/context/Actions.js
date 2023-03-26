@@ -11,6 +11,7 @@ export const initialState = {
     refresh:getCookie("_R") || null,
     role:getCookie("_R_F") || null,
     id:getCookie("_D") || null,
+    global_err:{msg:"",show:false,type:""}
 }
 export const actions = {
     SET_FORM_ERROR:"SET_FORM_ERROR",
@@ -18,5 +19,7 @@ export const actions = {
     SET_CURRENT_USER:"SET_CURRENT_USER",
     SETUP_USER:"SETUP_USER",
     SET_REDIRECT:"SET_REDIRECT",
-    LOGOUT:"LOGOUT"
+    LOGOUT:"LOGOUT",
+    SET_GLOBAL_ERROR:"SET_GLOBAL_ERROR",
+    SET_GLOBAL_ERROR_DEFAULTS:"SET_GLOBAL_ERROR_DEFAULTS"
 }

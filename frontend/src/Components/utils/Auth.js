@@ -42,7 +42,7 @@ export const verifyRegister = ({firstName,lastName,phone,email,password,confirmP
         })
         return false
     }
-    if(!phone.startsWith("+254") || !phone.startsWith("+234")){
+    if(!phone.startsWith("+254") && !phone.startsWith("+234")){
         changeErr({
             msg:"Phone must start with +254 0r +234",
             show:true,
@@ -78,7 +78,7 @@ export const verifyCode = ({phone,code,changeErr})=>{
         })
         return false
     }
-    if(!phone.startsWith("+254") || !phone.startsWith("+234")){
+    if(!phone.startsWith("+254") && !phone.startsWith("+234")){
         changeErr({
             msg:"Phone must start with +254 or +234",
             show:true,

@@ -5,6 +5,7 @@ import { NavBar, Footer } from "../Components/Wrapper/index";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { EventContext } from '../Components/events/context/EventContext';
+import { Alert } from '../Components/all/error/Alert';
 
 const ProtectedRoutes = () => {
 
@@ -18,6 +19,7 @@ const ProtectedRoutes = () => {
     <Main>
       <NavBar />
       <div className="all">
+        <Alert/>
         <Outlet />
       </div>
       <Footer />

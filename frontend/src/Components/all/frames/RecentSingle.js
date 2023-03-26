@@ -4,10 +4,10 @@ import tw from 'twin.macro'
 import { Link } from 'react-router-dom'
 import { useText } from '../../hooks/useText'
 import { useDate } from '../../hooks/useDate'
-export const RecentSingle = ({imageUrl,title,description,createdAt,_id}) => {
+export const RecentSingle = ({imageUrl,title,description,createdAt,id}) => {
   return (
     <Main>
-        <Link className="event-image" to={`/events/${_id}`}>
+        <Link className="event-image" to={`/events/${id}`}>
           <img
             className="event-image"
             src={imageUrl}

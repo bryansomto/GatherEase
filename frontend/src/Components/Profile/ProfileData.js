@@ -3,7 +3,8 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useGlobally } from "../../context/AppContext";
 import { ProfileList } from "./Profile";
-import { Link} from "react-router-dom";
+import noProfile from "../../Assets/svg/profile.svg"
+import { NoData } from "../all/error/NoData";
 import {FaCheckCircle} from "react-icons/fa"
 import  {Loader} from "../all/load/Loader"
 const ProfileData = () => {
@@ -23,13 +24,7 @@ const ProfileData = () => {
         { 
           user?<>
           <ProfileList {...user}/>
-        <div className="links">
-          <button>Delete</button>
-          <Link to="/profile/update" >Edit</Link>
-        </div>
-          </>:<p>
-            Unable to get user Details
-          </p>
+          </>:<NoData text="No user information" img={noProfile}/>
         }
     </Main>
   );

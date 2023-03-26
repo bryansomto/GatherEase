@@ -1,20 +1,28 @@
 import React from 'react'
 import tw from 'twin.macro'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
-export const Detail = ({icon,title,value}) => {
+export const Detail = ({icon,title,value, link=false, url}) => {
   return (
     <Main>
         <div className="title">
           {icon}
         <p>{title}</p>
         </div>
+        {
+          link?
+          <Link to={url}>
+            {value}
+          </Link>
+          :
         <p className="text">{value}</p>
+        }
       </Main>
   )
 }
 
-const Main =styled.div`
+export const Main =styled.div`
 ${tw`flex`}
     .title{
       ${tw`w-32 flex space-x-5 items-center`}
@@ -24,7 +32,9 @@ ${tw`flex`}
       }.icon{
         ${tw`text-newGreen`}
       }
-    }.text{
+    }a,.text{
         ${tw`ml-5`}
+    }a{
+      ${tw`text-newBlue hover:underline`}
     }
 `

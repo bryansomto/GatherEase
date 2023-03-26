@@ -23,6 +23,14 @@ export const reducer = (state,action) =>{
         case actions.LOGOUT:{
             return {...state, token:null,refresh:null,role:null,id:null}
         }
+        case actions.SET_GLOBAL_ERROR:{
+            const {err} = action.payload
+            return {...state, global_err:err}
+        }
+        case actions.SET_GLOBAL_ERROR_DEFAULTS:{
+            const err = {msg:"",show:false,type:""}
+            return {...state, global_err:err}
+        }
         default:{
             return state
         }

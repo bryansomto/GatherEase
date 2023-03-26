@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGlobally } from "../../context/AppContext";
 import { Main, Form } from "./styles";
 import { verifyRegister } from "../utils/Auth";
@@ -13,8 +13,9 @@ const body = {
   confirmPassword: "",
 };
 export const SignUp = () => {
-  const { setFormError, register_error, createUser } = useGlobally();
+  const { setFormError, register_error, createUser,register_redirect } = useGlobally();
   const [data, setData] = useState(body);
+  const navigate = useNavigate()
   const form = useRef()
   const { type } = useParams();
   let currentType = type === "organizer" ? "organizer" : "user";
@@ -43,6 +44,11 @@ export const SignUp = () => {
   const changeErr = (err) => {
     setFormError("register", err);
   };
+  useEffect(()=>{
+    if(register_redirect){
+      setTimeout(()=>navigate(`/${type}/verify`), 3000)
+    }
+  },[])
   return (
     <Main ref={form}>
       <Form onSubmit={(e) => handleSubmit(e)}>

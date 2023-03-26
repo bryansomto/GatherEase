@@ -35,9 +35,12 @@ export const Form = styled.form`
     }
   }
   .submit {
-    ${tw`items-end pr-5 md:max-w-none max-w-[410px] `}
-    input {
+    ${tw`flex-row justify-between items-end pr-5 md:max-w-none max-w-[410px] `}
+    button{
       ${tw`w-auto cursor-pointer py-2.5 px-5 bg-newOrange border-none text-white rounded-lg`}
+    }
+    input {
+      ${tw`w-auto cursor-pointer py-2.5 px-5 bg-newPurple border-none text-white rounded-lg`}
     }
   }
   .input-radio {
