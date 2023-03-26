@@ -1,57 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Form } from "../styles";
 import {ContentHeader} from "../../all/headers/ContentHeader"
+import { ImageUpload } from "./ImageUpload";
+import { Categories } from "./Categories";
 import moment from "moment";
+import {validateEvent} from "../../utils/Events"
 import { useEvents } from "../context/EventContext";
+import { Venues } from "./Venues";
+import { FormError } from "../../all/error/FormError";
 const body = {
   venueId: "",
   categoryId: "",
-  isPublic: "Yes",
-  day: moment(new Date).format("YYYY-MM-DD"),
-  time: moment(new Date).format("HH:MM:SS"),
+  isPublic: true,
+  day: "",
+  time: moment(new Date()).format("LTS"),
+  imageUrl: moment(new Date()).format("YYYY-MM-DD"),
+  title:"",
+  description:"",
+  city:""
 };
 const CreateEventForm = () => {
   const [data, setData] = useState(body);
-  const {createEvents} = useEvents()
-  const [category, setCategory] = useState(["Cloned","Done","undo"])
-  const [venues, setVenues] = useState({})
+  const form = useRef() 
+  const {createEvents,eventImage,setErr,form_error} = useEvents()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
+  const changeImage = ()=>{
+    setData({ ...data, imageUrl: eventImage.data });
+  }
+  const handlePublic = (val)=>{
+    setData({ ...data, isPublic:val });
+  }
+  const handleChildren = (name,value)=>{
+    setData({ ...data, [name]: value });
+  }
   const handleSubmit = (e)=>{
     e.preventDefault()
-    createEvents()
-  }
+    form.current.scrollIntoView({scroll:"smooth"})
+    const date = new Date(`${data.day} ${data.time}`)
+    const day = date.getDay()
+    const weekday=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+const newData = {...data, day:weekday[day], date:date.toISOString(), changeErr}
+console.log(newData);
+if(validateEvent(newData)){
+  createEvents(newData)
+}
+} 
+const changeErr = (err)=>{
+  setErr("form_error",err)
+}
+  useEffect(()=>{
+    changeImage()
+  },[eventImage.data])
   return (
     <Main>
         <ContentHeader url="/events" title="create event" text="all events"/>
-      <Form onSubmit={(e)=>handleSubmit(e)}>
-        <div className="input">
-          <label htmlFor="venueId"> Venue </label>
+      <Form onSubmit={(e)=>handleSubmit(e)} ref={form}>
+        <FormError {...form_error}/>
+      <div className="input">
+          <label htmlFor="title"> title </label>
           <input
             type="text"
-            name="venueId"
-            placeholder="(e.g). choose a place"
-            value={data.venueId}
+            name="title"
+            placeholder="(e.g). title"
+            value={data.title}
             onChange={(e) => handleChange(e)}
           />
         </div>
         <div className="input">
-          <label htmlFor="categoryId"> Category</label>
-          <select
+          <label htmlFor="description">
+            description 
+            <span id="count">({data.description.length} {(data.description.length === 0) ? "character" : "characters"})</span>
+            </label>
+          
+          <textarea
             type="text"
-            name="categoryId"
-            value={data.categoryId}
+            name="description"
+            placeholder="(e.g). A Great place"
+            value={data.description}
             onChange={(e) => handleChange(e)}
-          >
-            {
-                category.map((item)=><option value={item}>{item}</option>)
-            }
-          </select>
+          />
         </div>
+       <Venues handleChildren={handleChildren}/>
+        <Categories handleChildren={handleChildren}/>
+        <ImageUpload/>
         <div className="input-radio">
           <p> Make it Public </p>
           <div>
@@ -59,9 +95,8 @@ const CreateEventForm = () => {
               <input
                 type="radio"
                 name="isPublic"
-                value={data.isPublic}
-                id="yes"
-                onChange={(e) => handleChange(e)}
+                onChange={() => handlePublic(true)}
+                checked
               />
               <label htmlFor="yes">Yes</label>
             </div>
@@ -69,10 +104,7 @@ const CreateEventForm = () => {
               <input
                 type="radio"
                 name="isPublic"
-                value={data.isPublic}
-                id="no"
-                checked
-                onChange={(e) => handleChange(e)}
+                onChange={() => handlePublic(false)}
               />
               <label htmlFor="no">No</label>
             </div>
@@ -96,6 +128,16 @@ const CreateEventForm = () => {
             onChange={(e) => handleChange(e)}
           />
         </div>
+        <div className="input">
+          <label htmlFor="city"> City </label>
+          <input
+            type="text"
+            name="city"
+            placeholder="(e.g) Nairobi"
+            value={data.city}
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
         <div className="submit">
           <input type="submit" value="Create event"/>
         </div>
@@ -105,6 +147,6 @@ const CreateEventForm = () => {
 };
 
 export default CreateEventForm;
-const Main = styled.form`
+const Main = styled.div`
   ${tw`w-full max-w-[830px] space-y-5 flex flex-col`}
 `;

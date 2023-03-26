@@ -1,5 +1,4 @@
 import { getCookie} from "./utils"
-console.log(getCookie("_R_F"),getCookie("_D"))
 export const initialState = {
     user:null,
     login_error:{msg:"",show:false,type:""},

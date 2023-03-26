@@ -15,7 +15,7 @@ export const FormError = ({msg,show,type}) => {
 
 
 const Main = styled.div`
-${tw`relative p-2 px-2 rounded-lg`}
+${tw`max-w-[400px] relative p-2 px-2 rounded-lg`}
 overflow:hidden;
 ${(props)=>props.type === "warning" && tw`text-red-600 bg-red-100`}
 ${(props)=>props.type === "success" && tw`text-green-600 bg-green-100`}

@@ -4,10 +4,10 @@ import {useDate} from "../../hooks/useDate"
 import { useTextMore } from '../../hooks/useText'
 import { Link } from 'react-router-dom'
 import tw from 'twin.macro'
-export const Event = ({image, description,createdAt,title,index}) => {
+export const Event = ({imageUrl, description,createdAt,title,id}) => {
   return (
     <Main>
-      <Link to={`/events/${index}`}><img className="event-image" src={image} alt={createdAt}/></Link>
+      <Link to={`/events/${id}`}><img className="event-image" src={imageUrl} alt={title}/></Link>
       <header className='font'>{title}</header>
       <p>{useTextMore(description)}</p>
       <p className='created'><span className='font'>Created At</span>{useDate(createdAt)}</p>
@@ -15,9 +15,9 @@ export const Event = ({image, description,createdAt,title,index}) => {
   )
 }
 const Main = styled.div`
-${tw`w-full flex flex-col space-y-2`}
+${tw`w-full max-w-[530px] flex flex-col space-y-2`}
 .event-image{
-  ${tw`rounded-lg w-full h-full`}
+  ${tw`rounded-lg w-full h-full object-cover h-[336px]`}
 }.font{
   font-family:poppinsBold;
 }

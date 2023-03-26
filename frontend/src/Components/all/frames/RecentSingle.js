@@ -4,13 +4,13 @@ import tw from 'twin.macro'
 import { Link } from 'react-router-dom'
 import { useText } from '../../hooks/useText'
 import { useDate } from '../../hooks/useDate'
-export const RecentSingle = ({image,title,description,createdAt, index}) => {
+export const RecentSingle = ({imageUrl,title,description,createdAt,_id}) => {
   return (
     <Main>
-        <Link className="event-image" to={`/events/${index}`}>
+        <Link className="event-image" to={`/events/${_id}`}>
           <img
             className="event-image"
-            src={image}
+            src={imageUrl}
             alt={title}
           />
         </Link>
@@ -18,10 +18,9 @@ export const RecentSingle = ({image,title,description,createdAt, index}) => {
             <header className="font">{title}</header>
             <div>
             <p>{useText(description)}</p>
-            <p className="created">
-              <span className="font">Created At</span>
+            <div className="created">
               {useDate(createdAt)}
-            </p>
+            </div>
             </div>
           </div>
         </Main>
@@ -44,9 +43,9 @@ const Main = styled.div`
             ${tw`text-xs lg:text-sm`}
         }
         .created {
-          ${tw`text-[rgba(0,0,0,.5)] text-xs lg:text-sm`}
+          ${tw`flex items-center text-[rgba(0,0,0,.5)] text-[10px] lg:text-sm`}
           span {
-            ${tw`text-[rgba(0,0,0,.5)] text-xs mr-5`}
+            ${tw`text-[rgba(0,0,0,.5)] text-[10px] lg:text-xs mr-5`}
           }
         }
     }

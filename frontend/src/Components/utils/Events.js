@@ -81,3 +81,19 @@ export const guests = [[{
 },
 ],
 ]
+
+
+export const validateEvent = ({ date,title,description,categoryId,venueId,isPublic,day,city,imageUrl,changeErr})=>{
+console.log(date,title,description,categoryId,venueId,isPublic,day,city,imageUrl,changeErr);
+    if(!date || !title || !description || !categoryId || !venueId || !day || !city || !imageUrl){
+        changeErr({msg:"All fields are required",show:true,type:"warning"})
+        console.log("here");
+        return false
+    }
+    if(description.length < 200){
+        console.log("here");
+        changeErr({msg:"Description must be atleast 200 characters",show:true,type:"warning"})
+        return false
+    }
+    return true
+}
