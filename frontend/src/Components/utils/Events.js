@@ -84,7 +84,6 @@ export const guests = [[{
 
 
 export const validateEvent = ({ date,title,description,categoryId,venueId,isPublic,day,city,imageUrl,changeErr})=>{
-console.log(date,title,description,categoryId,venueId,isPublic,day,city,imageUrl,changeErr);
     if(!date || !title || !description || !categoryId || !venueId || !day || !city || !imageUrl){
         changeErr({msg:"All fields are required",show:true,type:"warning"})
         console.log("here");

@@ -29,7 +29,7 @@ export const reducer = (state,action)=>{
         }
         case actions.SET_VENUES:{
             const {data} = action.payload
-            return {...state,  venues:{data:data, loading:false}}
+            return {...state,  venues:{data:data.data,page:data.page,totalPages:data.totalPages, loading:false}}
         }
         case actions.SET_YOUR_EVENTS:{
             const {data,page,totalPages} = action.payload
@@ -62,6 +62,12 @@ export const reducer = (state,action)=>{
         }
         case actions.SET_EVENTS_DEFAULT:{
             return {...state,  events:{data:[],page:0,totalPages:0, loading:true}}
+        }
+        case actions.SET_DEFAULT_USER_EVENTS:{
+            return {...state,  usersEvents: { data: [], page:0,totalPages:0,loading: true, err: {msg:"",show:false,type:""} }}
+        }
+        case actions.SET_DEFAULT_GUESTS:{
+            return {...state,  guests:{data:[],loading:true}}
         }
         default:{
             throw new Error(`No such action as ${action.type}`)

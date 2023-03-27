@@ -9,7 +9,9 @@ import moment from "moment";
 import {validateEvent} from "../../utils/Events"
 import { useEvents } from "../context/EventContext";
 import { Venues } from "./Venues";
-import { FormError } from "../../all/error/FormError";
+import { removeCookie } from "../../../context/utils";
+import { useNavigate } from "react-router-dom";
+import { useGlobally } from "../../../context/AppContext";
 const body = {
   venueId: "",
   categoryId: "",
@@ -24,7 +26,9 @@ const body = {
 const CreateEventForm = () => {
   const [data, setData] = useState(body);
   const form = useRef() 
-  const {createEvents,eventImage,setErr,form_error} = useEvents()
+  const {createEvents,eventImage,setGlobalError} = useEvents()
+  const {setGlobalErr} = useGlobally()
+  const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -40,18 +44,29 @@ const CreateEventForm = () => {
   }
   const handleSubmit = (e)=>{
     e.preventDefault()
-    form.current.scrollIntoView({scroll:"smooth"})
     const date = new Date(`${data.day} ${data.time}`)
     const day = date.getDay()
     const weekday=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 const newData = {...data, day:weekday[day], date:date.toISOString(), changeErr}
-console.log(newData);
 if(validateEvent(newData)){
-  createEvents(newData)
+  createEvents(newData).then(()=>{
+    removeCookie("_image");
+  setGlobalErr(
+    {
+      msg: "Event successfully created",
+      show: true,
+      type: "success",
+    }
+  )
+  navigate("/events")
+  }).catch((error)=>{
+
+    setGlobalError(error)
+  })
 }
 } 
 const changeErr = (err)=>{
-  setErr("form_error",err)
+  setGlobalErr(err)
 }
   useEffect(()=>{
     changeImage()
@@ -60,7 +75,6 @@ const changeErr = (err)=>{
     <Main>
         <ContentHeader url="/events" title="create event" text="all events"/>
       <Form onSubmit={(e)=>handleSubmit(e)} ref={form}>
-        <FormError {...form_error}/>
       <div className="input">
           <label htmlFor="title"> title </label>
           <input

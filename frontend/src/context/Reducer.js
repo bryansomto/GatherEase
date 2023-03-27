@@ -38,6 +38,10 @@ export const reducer = (state,action) =>{
         case actions.SET_EVENTS_ATTENDED_DEFAULT:{
             return {...state, eventAttended:{data:[], loading:true}}
         }
+        case actions.SET_AUTH:{
+            const {accessToken, refreshToken} = action.payload
+            return {...state, refresh:refreshToken, token:accessToken}
+        }
         default:{
             return state
         }

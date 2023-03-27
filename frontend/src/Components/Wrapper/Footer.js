@@ -33,7 +33,7 @@ const List = ({ data, title }) => {
 };
 export default Footer;
 const Main = styled.footer`
-  ${tw`bg-newBlue text-white flex flex-col justify-between space-y-24 pt-[4rem] h-[28rem]`}
+  ${tw`bg-newBlue text-white flex flex-col justify-between space-y-16 pt-[4rem] h-[20rem]`}
   .links {
     ${tw`flex space-x-12 md:space-x-24 pl-5 md:pl-10`}
   }

@@ -3,7 +3,7 @@ import { actions, initialState } from "./Actions";
 import { reducer } from "./Reducer";
 import { useGlobally } from "../../../context/AppContext";
 import axios from "axios";
-import { getCookie, removeCookie, setCookie } from "../../../context/utils";
+import { removeCookie, setCookie } from "../../../context/utils";
 
 const EventProvider = React.createContext();
 
@@ -16,40 +16,53 @@ const EventContext = ({ children }) => {
       "x-auth-token": `${token}`,
     },
   });
+  axios.interceptors.response.use(
+    (response)=>response, 
+    function (error) {
+    if(error.message && error.message === "Network Error"){
+      setGlobalErr({msg:"Check your internet connection",show:true,type:"warning"})
+    }
+    return Promise.reject(error);
+  });
   const setErr = (type, err) => {
     dispatch({ type: actions.SET_ERROR, payload: { type, err } });
     setTimeout(() => dispatch({ type: actions.DEFAULT_ERROR }), 3000);
   };
-  const addFilter  = (obj)=>{
-    let url = "event"
-    let del = []
-    Object.entries(obj).forEach((i)=>{
+  const addFilter = (obj, url) => {
+    Object.entries(obj).forEach((i) => {
       if(i[1]){
-        del = [...del, i]
-        return
+        url += `&${i[0]}=${i[1]}`;
       }
-    })
-    del.forEach((i, index)=>{
-      if(index === 0){
-        url = `event?${i[0]}=${i[1]}`
-      }else{
-        url += `&${i[0]}=${i[1]}`
       }
-    })
-    return url
-  }
-  const getEvents = async (body={city:"",category:"",venue:"",startDate:"",endDate:""}) => {
-    dispatch({type:actions.SET_EVENTS_DEFAULT})
-    let url = "event"
-    const {city,category,venue} = body
-    const startDate = (body.startDate)?new Date(body.startDate).toISOString():""
-    const endDate = (body.endDate)?new Date(body.endDate).toISOString():""
-    if(city && category && venue && startDate && endDate){
-      url = `event?city=${city}&category=${category}&venue=${venue}&startDate=${startDate}&endDate=${endDate}`
-    }else{
-      const map = {city:city,category:category,venue:venue,startDate:startDate,endDate:endDate}
-      url = addFilter(map)
+    );
+    return url;
+  };
+  const setGlobalError = (error) => {
+    if (error.response && error.response.data && error.response.status !== 401) {
+      setGlobalErr({msg:error.response.data.message ,show: true,type: "warning"});
     }
+  };
+  const getEvents = async (
+    body = { city: "", category: "", venue: "", startDate: "", endDate: "" },
+    page = 1,
+    count = 5
+  ) => {
+    dispatch({ type: actions.SET_EVENTS_DEFAULT });
+    let url = "event";
+    const { city, category, venue } = body;
+    const startDate = body.startDate
+      ? new Date(body.startDate).toISOString()
+      : "";
+    const endDate = body.endDate ? new Date(body.endDate).toISOString() : "";
+      url = `event?page=${page}&count=${count}`
+      const map = {
+        city: city,
+        category: category,
+        venue: venue,
+        startDate: startDate,
+        endDate: endDate,
+      }
+      url = addFilter(map, url);
     try {
       const { data } = await client.get(url);
       dispatch({
@@ -57,7 +70,7 @@ const EventContext = ({ children }) => {
         payload: { events: data.data },
       });
     } catch (error) {
-      console.log(error);
+      setGlobalError(error)
     }
   };
   const getSingleEvent = async (id) => {
@@ -80,49 +93,12 @@ const EventContext = ({ children }) => {
         payload: { organizer: data.data },
       });
     } catch (error) {
-      console.log(error);
+      setGlobalError(error)
     }
   };
   const deleteEvent = (id) => client.delete(`event/${id}`);
   const getUpdateData = (id) => client.get(`event/${id}`);
   const updateEvent = async (id, body) => {
-    const { title, description } = body;
-    try {
-      await client.put(`event/${id}`, { title, description });
-      setErr("update_error", {
-        msg: "Event successfully updated",
-        show: true,
-        type: "success",
-      });
-    } catch (error) {
-      if (error?.response?.data) {
-        setErr("update_error", {
-          msg: error.response.data.message,
-          show: true,
-          type: "warning",
-        });
-      }
-      console.log(error);
-    }
-  };
-
-  const uploadImage = async (body) => {
-    dispatch({
-      type: actions.START_UPLOAD,
-    });
-    try {
-      const { data } = await client.post("event/upload", body);
-      setCookie("_image", data.data.imageUrl);
-      dispatch({
-        type: actions.UPLOAD_IMAGE,
-        payload: { data: data.data.imageUrl },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const createEvents = async (body) => {
     const {
       date,
       title,
@@ -135,7 +111,70 @@ const EventContext = ({ children }) => {
       imageUrl,
     } = body;
     try {
-      await client.post("event", {
+      await client.put(`event/${id}`, {date,
+        title,
+        description,
+        categoryId,
+        venueId,
+        isPublic,
+        day,
+        city,
+        imageUrl, });
+      setGlobalErr({
+        msg: "Event successfully updated",
+        show: true,
+        type: "success",
+      });
+    } catch (error) {
+      setGlobalError(error);
+    }
+  };
+
+  const setCurrentImage = (data)=>{
+    dispatch({
+      type: actions.START_UPLOAD,
+    });
+    setCookie("_image", data);
+    dispatch({
+      type: actions.UPLOAD_IMAGE,
+      payload: { data },
+    });
+  }
+  const storeFormdata = (data)=>{
+    dispatch({
+      type: actions.UPLOAD_IMAGE,
+      payload: { data},
+    });
+  }
+
+  const uploadImage = async (body) => {
+    dispatch({
+      type: actions.START_UPLOAD,
+    });
+    try {
+      const { data } = await client.post("event/upload", body);
+      dispatch({
+        type: actions.UPLOAD_IMAGE,
+        payload: { data: data.data.imageUrl },
+      });
+    } catch (error) {
+      setGlobalError(error)
+    }
+  };
+
+  const createEvents = (body) => {
+    const {
+      date,
+      title,
+      description,
+      categoryId,
+      venueId,
+      isPublic,
+      day,
+      city,
+      imageUrl,
+    } = body;
+    return client.post("event", {
         date,
         title,
         description,
@@ -146,27 +185,34 @@ const EventContext = ({ children }) => {
         city,
         imageUrl,
       });
-      removeCookie("_image");
-      setErr("form_error", {
-        msg: "Event successfully created",
-        show: true,
-        type: "success",
-      });
-      getEvents();
-    } catch (error) {
-      if (error?.response?.data) {
-        setErr("form_error", {
-          msg: error.response.data.message,
-          show: true,
-          type: "warning",
-        });
-      }
-      console.log(error);
-    }
+
   };
-  const getUserEvents = async (id) => {
+  const mapping = (body, url) => {
+    Object.entries(body).forEach((i) => {
+      if (i[1]) {
+        url += `&${i[0]}=${i[1]}`;
+      }
+    });
+    return url;
+  };
+  const getSingleEventUser =  (id) => client.get(`event/${id}`);
+  const getUserEvents = async (
+    id,
+    body = { city: "", category: "", venue: "", startDate: "", endDate: "" },
+    page=1,
+    count=5
+  ) => {
+    dispatch({ type: actions.SET_DEFAULT_USER_EVENTS });
+    let url = `event?organizerId=${id}&page=${page}&count=${count}`;
+    const { city, category, venue } = body;
+    const startDate = body.startDate
+      ? new Date(body.startDate).toISOString()
+      : "";
+    const endDate = body.endDate ? new Date(body.endDate).toISOString() : "";
+    const newBody ={city, category, venue,startDate,endDate} 
+    url = mapping(newBody, url);
     try {
-      const { data } = await client.get(`event?organizerId=${id}`);
+      const { data } = await client.get(url);
       const { page, totalPages } = data.data;
       dispatch({
         type: actions.SET_YOUR_EVENTS,
@@ -177,27 +223,59 @@ const EventContext = ({ children }) => {
         },
       });
     } catch (error) {
-      console.log(error);
+      setGlobalError(error)
     }
   };
-  const rspvNow =  async (body) => {
+  //-------GUESTS---------------
+  const rspvNow = async (body) => {
     try {
-      const { data } = await client.post(`event/rsvp`,body);
-      setGlobalErr({msg:"You Registered for this event",show:true,type:"success"})
+      await client.post(`event/rsvp`, body);
+      setGlobalErr({
+        msg: "You Registered for this event",
+        show: true,
+        type: "success",
+      });
     } catch (error) {
-      console.log(error);
+      setGlobalError(error)
     }
   };
   const getGuests = async (id) => {
-    getSingleEvent(id)
+    dispatch({type:actions.SET_DEFAULT_GUESTS})
+    getSingleEvent(id);
     try {
       const { data } = await client.get(`event/guestList/${id}`);
       dispatch({
-        type:actions.GET_GUESTS,
-        payload:{guests:data.data.guests}
-      })
+        type: actions.GET_GUESTS,
+        payload: { guests: data.data.guests },
+      });
     } catch (error) {
-      console.log(error);
+      setGlobalError(error)
+    }
+  };
+  const removeGuest = async (id,eventId) => {
+    try {
+      await client.delete(`guest/${id}`);
+      getGuests(eventId)
+      setGlobalErr({
+        msg: "You removed a user from guest list",
+        show: true,
+        type: "success",
+      });
+    } catch (error) {
+      setGlobalError(error)
+    }
+  };
+  const attendedGuest = async (guestId, eventId) => {
+    try {
+      await client.post(`guest/markAttended`,{guestId});
+      getGuests(eventId)
+      setGlobalErr({
+        msg: "You changed guest status to Attended event",
+        show: true,
+        type: "success",
+      });
+    } catch (error) {
+      setGlobalError(error)
     }
   };
 
@@ -225,28 +303,28 @@ const EventContext = ({ children }) => {
       console.log(error);
     }
   };
-  const getVenues = async (body={city: "", name: "" }) => {
-    dispatch({ type: actions.SET_VENUES_DEFAULT});
-    const {city,name} = body
-    let url  = "venue";
-    if(city && name){
-      url = `venue?city=${city}&name=${name}`
+  const getVenues = async (body = { city: "", name: "" },page=1,count=5) => {
+    dispatch({ type: actions.SET_VENUES_DEFAULT });
+    const { city, name } = body;
+    let url = `venue?page=${page}&count=${count}`;
+    if (city && name) {
+      url += `&city=${city}&name=${name}`;
     }
-    if(city){
-      url = `venue?city=${city}`
+    if (city) {
+      url += `&city=${city}`;
     }
-    if(name){
-      url = `venue?name=${name}`
+    if (name) {
+      url += `&name=${name}`;
     }
     try {
       const { data } = await client.get(url);
-      dispatch({ type: actions.SET_VENUES, payload: { data: data.data.data } });
+      dispatch({ type: actions.SET_VENUES, payload: { data: data.data} });
     } catch (error) {
       console.log(error);
     }
   };
   const getSingleVenue = async (id) => {
-    dispatch({type:actions.SET_CURRENT_VENUE_DEFAULT})
+    dispatch({ type: actions.SET_CURRENT_VENUE_DEFAULT });
     try {
       const { data } = await client.get(`venue/${id}`);
       dispatch({
@@ -276,7 +354,13 @@ const EventContext = ({ children }) => {
         getEventOrganizer,
         getGuests,
         rspvNow,
-        getSingleVenue
+        getSingleVenue,
+        removeGuest,
+        setGlobalError,
+        getSingleEventUser,
+        attendedGuest,
+        setCurrentImage,
+        storeFormdata
       }}
     >
       {children}

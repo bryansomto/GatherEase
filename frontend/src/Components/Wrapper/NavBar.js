@@ -5,6 +5,8 @@ import { NavLink} from "react-router-dom";
 import { NavbarLinks } from "../../utils/Wrapper";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useGlobally } from "../../context/AppContext";
+import {Alert} from "../all/error/Alert"
+
 const NavBar = () => {
   const {user,logout ,role, id} = useGlobally()
   const [open, setOpen] = useState(false)
@@ -44,7 +46,7 @@ const NavBar = () => {
       </NavLink>
       <button
       className="btn-logout"
-          onClick={logout}
+          onClick={()=>logout()}
         >
         logout
       </button>
@@ -70,7 +72,7 @@ const Main = styled.nav`
     ${tw`capitalize text-3xl text-newBlue`}
   }
   .navbar-links {
-    ${tw`absolute w-full md:w-max pb-10 md:p-0 bg-white z-20 top-full flex-col -translate-x-1/2 left-1/2 md:relative 
+    ${tw`absolute w-full md:w-max pb-2 md:p-0 bg-white z-20 top-full flex-col -translate-x-1/2 left-1/2 md:relative 
     flex md:left-0 md:top-0 md:z-0 md:-translate-x-0 md:flex-row items-start md:items-center md:space-y-0 space-x-0 md:space-x-5 lg:space-x-10`}
     ${(props)=>props.open || tw`hidden md:flex`}
     a {
@@ -83,7 +85,7 @@ const Main = styled.nav`
       ${tw`text-white bg-newBlue md:bg-white md:text-newBlue`}
     }
     .btn-logout{
-      ${tw`text-black hover:text-newBlue`}
+      ${tw`w-full md:w-auto p-5 md:p-0 capitalize text-start text-black hover:text-newBlue`}
     }
   }
   .dropdown {

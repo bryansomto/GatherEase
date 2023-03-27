@@ -40,7 +40,7 @@ export const AttendedEvents = () => {
             <td>time</td>
             <td>date</td>
             <td>status</td>
-            <td>RSPV at</td>
+            <td>RSVP at</td>
           </tr>
         </thead>
         <tbody>
@@ -55,8 +55,7 @@ export const AttendedEvents = () => {
               const { eventId, attended, createdAt} = item;
               return (
                 <tr key={index}>
-                  <ParseEvent eventId={eventId}/>
-                  <td>{attended?"Attended":"Upcoming"}</td>
+                  <ParseEvent eventId={eventId} attended={attended}/>
                   <td>{moment(createdAt).format("dddd, MMM D YYYY")}</td>
                 </tr>
               );
@@ -89,7 +88,7 @@ const Main = styled.div`
         thead > tr, tbody > tr {
             ${tw`border-b border-solid border-[rgba(0,0,0,.1)]`}
             td {
-              ${tw`min-w-fit py-5 text-[rgba(0,0,0,.7)]`}
+              ${tw`min-w-fit text-sm py-5 text-[rgba(0,0,0,.7)]`}
             }
             .actions {
               ${tw`flex space-x-5`}
@@ -105,11 +104,10 @@ const Main = styled.div`
             }
           }
           thead tr td {
-            font-family: PoppinsBold;
+            font-family: PoppinsSemiBold;
             ${tw`capitalize`}
           }
           tbody tr td {
-            font-family: PoppinsSemiBold;
           }
           tfoot tr td {
             ${tw`py-5`}

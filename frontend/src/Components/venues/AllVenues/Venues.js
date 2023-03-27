@@ -4,21 +4,40 @@ import tw from "twin.macro";
 import { Venue } from "../../all/cards/Venue";
 import { Main } from "../../styles.js";
 import { ContentHeader } from "../../all/headers/ContentHeader";
-import { venuesData } from "../../utils/Venues";
 import { useEvents } from "../../events/context/EventContext";
 import { Loader } from "../../all/load/Loader";
 import { NoData } from "../../all/error/NoData";
 const Venues = () => {
   const [body, setBody] = useState({city: "", name: "" });
   const [send, setSend] = useState(false)
+  const [page,setPage] = useState(1)
   const {getVenues, venues} = useEvents()
   const handleChange = (e) => {
     const { value, name } = e.target;
       setBody({ ...body, [name]: value });
   };
+  const handleDir = (dir)=>{
+    const current = Number(venues.page)
+    const total = Number(venues.totalPages)
+    if(total !== 1){
+      if(dir === "next"){
+        if(current < total){
+          setPage(current + 1)
+        }else{
+          setPage(1)
+        }
+      }else{
+        if(current > 1){
+          setPage(current - 1)
+        }else{
+          setPage(total)
+        }
+      }
+    }
+  }
   useEffect(()=>{
-    getVenues(body)
-  },[send])
+    getVenues(body,page,4)
+  },[send,page])
   return (
     <Main>
       <FlexDiv>
@@ -56,8 +75,8 @@ const Venues = () => {
         
       </GridCol>
       <Div>
-        <button>previous</button>
-        <button>next</button>
+      <button onClick={()=>handleDir("prev")}>previous</button>
+        <button onClick={()=>handleDir("next")}>next</button>
       </Div>
     </Main>
   );

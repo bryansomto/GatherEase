@@ -13,19 +13,18 @@ import { Loader } from '../../all/load/Loader'
 import { useGlobally } from '../../../context/AppContext'
 const UpdateEventForm = () => {
   const {eventId} = useParams()
-  const {currentEvent,getUpdateData,update_error,updateEvent,setErr,deleteEvent} = useEvents()
-  const {id} = useGlobally()
+  const {currentEvent,getUpdateData,updateEvent,deleteEvent} = useEvents()
+  const {id,setGlobalErr} = useGlobally()
   const [data, setData]  = useState(currentEvent.data)
   const navigate = useNavigate()
-  const form = useRef()
   const [fill,setFill] = useState({})
   const [loading,setLoading] = useState(true)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  const handlePublic = (val)=>{
-    setData({ ...data, isPublic:val });
+  const handlePublic = (value)=>{
+    setData({ ...data, isPublic:value });
   }
   const handleChildren = (name,value)=>{
     setData({ ...data, [name]: value });
@@ -52,18 +51,17 @@ const UpdateEventForm = () => {
   }
   const handleSubmit = (e)=>{
     e.preventDefault()
-    form.current.scrollIntoView({scroll:"smooth"})
+    console.log(data)
     const date = new Date(`${data.day} ${data.time}`)
     const day = date.getDay()
     const weekday=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 const newData = {...data, day:weekday[day], date:date.toISOString(), changeErr}
-console.log(newData);
 if(validateEvent(newData)){
   updateEvent(eventId,newData)
 }
 } 
 const changeErr = (err)=>{
-  setErr("update_error",err)
+  setGlobalErr(err)
 }
 const handleDelete = (e)=>{
   e.preventDefault()
@@ -82,10 +80,7 @@ const handleDelete = (e)=>{
   return (
     <Main>
       <ContentHeader url={`/events/${eventId}`} title="update event" text="view event" />
-      <Form onSubmit={(e)=>handleSubmit(e)} ref={form}>
-        <div>
-      <FormError {...update_error}/>
-        </div>
+      <Form onSubmit={(e)=>handleSubmit(e)}>
       <div className="input">
           <label htmlFor="title"> title </label>
           <input
@@ -120,18 +115,19 @@ const handleDelete = (e)=>{
               <input
                 type="radio"
                 name="isPublic"
-                onChange={() => handlePublic(true)}
-                checked
+                onInput={() => handlePublic(true)}
+                defaultChecked={data.isPublic === true}
               />
-              <label htmlFor="yes">Yes</label>
+              <label htmlFor="isPublic">Yes</label>
             </div>
             <div>
               <input
                 type="radio"
                 name="isPublic"
-                onChange={() => handlePublic(false)}
+                onInput={() => handlePublic(false)}
+                defaultChecked={data.isPublic === false}
               />
-              <label htmlFor="no">No</label>
+              <label htmlFor="isPublic">No</label>
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ const body = {
   confirmPassword: "",
 };
 export const SignUp = () => {
-  const { setFormError, register_error, createUser,register_redirect } = useGlobally();
+  const { setFormError, register_error, createUser,setError } = useGlobally();
   const [data, setData] = useState(body);
   const navigate = useNavigate()
   const form = useRef()
@@ -38,17 +38,23 @@ export const SignUp = () => {
     };
     form.current.scrollIntoView()  
     if (verifyRegister(values)) {
-      createUser(currentType, { firstName, lastName, phone, email, password });
+      createUser(currentType, { firstName, lastName, phone, email, password }).then(()=>{
+            changeErr({
+              msg: "Redirecting to confirm registration...",
+              show: true,
+              type: "success",
+            });
+            setTimeout(()=>navigate(`/${type}/verify`), 3000)
+      }).catch(
+        (error)=>{
+            setError(error, "register", { msg: "", show: true, type: "warning" });
+        }
+      )
     }
   };
   const changeErr = (err) => {
     setFormError("register", err);
   };
-  useEffect(()=>{
-    if(register_redirect){
-      setTimeout(()=>navigate(`/${type}/verify`), 3000)
-    }
-  },[])
   return (
     <Main ref={form}>
       <Form onSubmit={(e) => handleSubmit(e)}>

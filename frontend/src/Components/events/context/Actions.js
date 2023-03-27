@@ -6,19 +6,14 @@ export const initialState = {
   currentEvent:{data:{}, loading:true},
   eventImage:{data:getCookie("_image") || "",loading:false},
   organizer:{data:{},loading:true},
-  form_error: {msg:"",show:false,type:""},
-  update_error:{msg:"",show:false,type:""},
   category:{data:[],loading:true},
-  venues:{data:[],loading:true},
+  venues:{data:[],page:0,totalPages:0,loading:true},
   currentVenue:{data:{}, loading:true},
   guests:{data:[],loading:true}
 };
 export const actions = {
   GET_EVENTS: "GET_EVENTS",
   SET_EVENTS_DEFAULT:"SET_EVENTS_DEFAULT",
-  ADD_EVENT: "GET_EVENT",
-  DELETE_EVENTS: "DELETE_EVENTS",
-  UPDATE_EVENT: "UPDATE_EVENT",
   SET_ERROR: "SET_ERROR",
   UPLOAD_IMAGE:"UPLOAD_IMAGE",
   START_UPLOAD:"START_UPLOAD",
@@ -32,5 +27,7 @@ export const actions = {
   GET_GUESTS:"GET_GUESTS",
   SET_VENUES_DEFAULT:"SET_VENUES_DEFAULT",
   SET_CURRENT_VENUE:"SET_CURRENT_VENUE",
-  SET_CURRENT_VENUE_DEFAULT:"SET_CURRENT_VENUE_DEFAULT"
+  SET_CURRENT_VENUE_DEFAULT:"SET_CURRENT_VENUE_DEFAULT",
+  SET_DEFAULT_USER_EVENTS:"SET_DEFAULT_USER_EVENTS",
+  SET_DEFAULT_GUESTS:"SET_DEFAULT_GUESTS"
 };

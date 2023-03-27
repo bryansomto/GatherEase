@@ -33,7 +33,7 @@ const Event = () => {
   const {title,imageUrl,description,date,venue,category,isPublic,organizerId} = currentEvent.data
   const verified = id === organizerId
   const isExpired = (new Date(date) - new Date() - 24 * 60 * 60 * 1000) < 0
-  const user = role === process.env.REACT_APP_USER
+  const isUser = role === process.env.REACT_APP_USER
   return (
     <Main>
       {verified?
@@ -59,10 +59,10 @@ const Event = () => {
       <Detail icon={ <BsFillShieldLockFill className="icon"/>} title={"privacy"} value={isPublic?"Public":"Private"}/>
       <div className="actions-event">
         {
-          (user && verified) && <Link to={`/events/update/${eventId}`}>Edit</Link> 
+          (!isUser && verified) && <Link to={`/events/update/${eventId}`}>Edit</Link> 
         }
         {
-          (user && !isExpired ) && <button onClick={()=>rspvNow({eventId})}>RSPV</button>
+          (isUser && !isExpired ) && <button onClick={()=>rspvNow({eventId})}>RSPV</button>
         }{
           (!verified && isExpired) && <button>Past Event</button>
         }

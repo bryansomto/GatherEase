@@ -17,9 +17,9 @@ const ProtectedRoutes = () => {
   return (
     <EventContext>
     <Main>
+      <Alert/>
       <NavBar />
       <div className="all">
-        <Alert/>
         <Outlet />
       </div>
       <Footer />
@@ -31,7 +31,7 @@ const ProtectedRoutes = () => {
 export default ProtectedRoutes;
 
 const Main = styled.main`
-  ${tw`min-h-full`}
+  ${tw`h-screen overflow-y-scroll`}
   .all {
     ${tw`flex flex-col`}
   }

@@ -15,6 +15,9 @@ const AppContext = ({ children }) => {
     },
   });
   client.interceptors.response.use((response)=>response, function (error) {
+    // if(error.response && error.response.status === 401){
+    //   logout()
+    // }
     return Promise.reject(error);
   });
   //----- utils -----------------------------------
@@ -28,7 +31,7 @@ const AppContext = ({ children }) => {
       type:actions.SET_GLOBAL_ERROR,
       payload:{err}
     })
-    setTimeout(()=>closeGlobal(),3000)
+    setTimeout(()=>closeGlobal(),6000)
   }
   const setFormError = (type, error) => {
     dispatch({
@@ -78,27 +81,30 @@ const AppContext = ({ children }) => {
   };
   //----- users -----------------------------------
   const createUser = async (type, body) => {
-    const path = "register";
     const { firstName, lastName, phone, email, password } = body;
-    try {
-      const { data } = await client.post(`${type}/register`, {
+    return await client.post(`${type}/register`, {
         firstName,
         lastName,
         phone,
         email,
         password,
       });
-      setFormError(path, {
-        msg: "Redirecting to confirm registration...",
-        show: true,
-        type: "success",
-      });
-      setRedirect(path, true);
-    } catch (error) {
-      setError(error, path, { msg: "", show: true, type: "warning" });
-      console.log(error);
-    }
   };
+  const setupUser = (accessToken, refreshToken, role, id, user)=>{
+    dispatch({
+      type: actions.SETUP_USER,
+      payload: {
+        user,
+        role: encodeRole(role),
+        id,
+      },
+    });
+    setLocal(accessToken, refreshToken, role, id);
+    dispatch({
+      type:actions.SET_AUTH,
+      payload:{accessToken, refreshToken}
+    })
+  }
   const loginUser = async (type, body) => {
     const { email, password } = body;
     const path = "login";
@@ -107,25 +113,9 @@ const AppContext = ({ children }) => {
       const { data } = await client.post(`${type}/login`, { email, password });
       const { user, accessToken, refreshToken } = data;
       if(type === "user"){
-        dispatch({
-          type: actions.SETUP_USER,
-          payload: {
-            user,
-            role: encodeRole(user.role),
-            id: user.id,
-          },
-        });
-        setLocal(accessToken, refreshToken, user.role, user?.id);
+        setupUser(accessToken, refreshToken, user.role, user.id,user);
       }else{
-        dispatch({
-          type: actions.SETUP_USER,
-          payload: {
-            user,
-            role: encodeRole(user.role),
-            id: user?.profile[`${type}Id`],
-          },
-        });
-        setLocal(accessToken, refreshToken, user.role, user?.profile[`${type}Id`]);
+        setupUser(accessToken, refreshToken, user.role, user.profile[`${type}Id`],user);
       }
       setRedirect(path, true);
     } catch (error) {
@@ -135,22 +125,10 @@ const AppContext = ({ children }) => {
   };
   const confirmUser = async (type, body) => {
     const { phone, code } = body;
-    const path = "code";
-    try {
-      const { data } = await client.post(`${type}/confirmation`, {
+    return await client.post(`${type}/confirmation`, {
         phone,
         code,
       });
-      setFormError(path, {
-        msg: "Confirmed registration. Redirecting...",
-        show: true,
-        type: "success",
-      });
-      setRedirect(path, true);
-    } catch (error) {
-      setError(error, path, { msg: "", show: true, type: "warning" });
-      console.log(error);
-    }
   };
   const getEventsAttended = async ()=>{
     dispatch({type:actions.SET_EVENTS_ATTENDED_DEFAULT})
@@ -164,11 +142,11 @@ const AppContext = ({ children }) => {
       console.log(error);
     }
   }
+  const mapper = {
+    ORGANIZER: "organizer",
+    USER: "user",
+  };
   const getCurrentUser = async () => {
-    const mapper = {
-      ORGANIZER: "organizer",
-      USER: "user",
-    };
     const type = mapper[decodeRole(state.role)];
     try {
       const { data } = await client.get(`${type}/profile`);
@@ -192,14 +170,23 @@ const AppContext = ({ children }) => {
         });
       }
     } catch (error) {
-      console.log(error);
+      logout()
     }
   };
-  const logout = () => {
+  const dryLogout = ()=>{
     defaultLocal();
-    dispatch({
-      type: actions.LOGOUT,
-    });
+      dispatch({
+        type: actions.LOGOUT,
+      });
+  }
+  const logout = async() => {
+    const type = mapper[decodeRole(state.role)]
+    try {
+      await client.post(`${type}/logout`)
+      dryLogout()
+    } catch (error) {
+      dryLogout()
+    }
   };
   useEffect(() => {
     getCurrentUser();
@@ -215,7 +202,9 @@ const AppContext = ({ children }) => {
         getCurrentUser,
         logout,
         setGlobalErr,
-        getEventsAttended 
+        getEventsAttended,
+        closeGlobal,
+        setError
       }}
     >
       {children}

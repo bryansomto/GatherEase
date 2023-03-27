@@ -5,12 +5,14 @@ import tw from 'twin.macro'
 import { useGlobally } from '../../../context/AppContext'
 
 export const Alert = () => {
-    const {global_err} = useGlobally()
+    const {global_err,closeGlobal} = useGlobally()
+    const err = {msg:"Error",show:true,type:"warning"}
   return (
    <>
-   {global_err.show && <Main type={global_err.type}>
+   {global_err.show   && <Main type={global_err.type}>
         <div>
             <header>Message</header>
+            <FaTimes onClick={closeGlobal}/>
         </div>
         <p>{global_err.msg}</p>
     </Main>
@@ -21,11 +23,17 @@ export const Alert = () => {
 
 
 const Main = styled.div`
-${tw`w-full max-w-[400px] p-3 bg-white absolute top-1/2 left-1/2 -translate-x-1/2 border border-solid rounded-lg -translate-y-1/2`}
-${(props)=>props.type === "warning" && tw`border-red-400`}
-${(props)=>props.type === "success" && tw`border-green-400`}
+${tw`w-full z-50 max-w-[250px] md:max-w-[500px] p-3 bg-white absolute top-[60px] left-1/2 -translate-y-1/2 -translate-x-1/2 border-transparent border-[5px] border-solid rounded-lg -translate-y-1/2`}
+box-shadow:0px 5px 8px 0px rgba(0,0,0,.3);
+${(props)=>props.type === "warning" && tw`border-l-red-400`}
+${(props)=>props.type === "success" && tw`border-l-green-400`}
+p{
+    font-family:poppins;
+    ${tw`text-sm text-black pt-2`}
+}
 >div{
-    ${tw`flex justify-between w-full`}
+    font-family:poppinsSemiBold;
+    ${tw`flex justify-between w-full text-sm`}
     ${(props)=>props.type === "warning" && tw`text-red-400`}
 ${(props)=>props.type === "success" && tw`text-green-400`}
 }

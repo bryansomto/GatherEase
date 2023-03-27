@@ -9,7 +9,7 @@ export const CodeVerify = () => {
     const navigate= useNavigate()
     const {type} = useParams()
     let currentType = (type === "organizer") ? "organizer" : "user"
-    const {code_error,setFormError,confirmUser,code_redirect} = useGlobally()
+    const {code_error,setFormError,confirmUser, setError} = useGlobally()
     const handleChange = (e) => {
         const { name, value } = e.target;
         setData({ ...data, [name]: value });
@@ -18,17 +18,23 @@ export const CodeVerify = () => {
         e.preventDefault()
         const {phone,code} = data
         if(verifyCode({phone,code,changeErr})){
-            confirmUser(currentType,{phone,code})
+            confirmUser(currentType,{phone,code}).then((res)=>{
+                changeErr({
+                    msg: "Confirmed registration. Redirecting...",
+                    show: true,
+                    type: "success",
+                  });
+                  setTimeout(()=>navigate(`/${type}/login`), 3000)
+              }).catch((error)=>{
+              setError(error, "code", { msg: "", show: true, type: "warning" });
+
+            })
         }
       }
       const changeErr = (err)=>{
         setFormError("code", err)
       }
-      useEffect(()=>{
-        if(code_redirect){
-          setTimeout(()=>navigate(`/${type}/login`), 3000)
-        }
-      },[])
+
   return (
     <Main>
           <Form onSubmit={(e)=>handleSubmit(e)}>

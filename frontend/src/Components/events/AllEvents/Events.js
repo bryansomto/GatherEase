@@ -4,7 +4,6 @@ import tw from 'twin.macro'
 import {Event} from "../../all/cards/Event"
 import {Main} from "../../styles.js"
 import { ContentHeader } from '../../all/headers/ContentHeader'
-import noevents from "../../../Assets/svg/events.svg"
 import {Loader} from "../../all/load/Loader"
 import { NoData } from '../../all/error/NoData'
 import { useEvents } from '../context/EventContext'
@@ -13,6 +12,7 @@ const Events = () => {
   const [body, setBody] = useState({city:"",category:"",venue:"",startDate:"",endDate:""})
   const [send,setSend] = useState(false)
   const {getEvents,events}=useEvents()
+  const [page,setPage] = useState(1)
   const {role} = useGlobally()
   const handleChange = (e)=>{
     const {value, name} = e.target
@@ -22,10 +22,30 @@ const Events = () => {
       setBody({...body, [name]:value})
     }
   }
+
+  const handleDir = (dir)=>{
+    const current = Number(events.page)
+    const total = Number(events.totalPages)
+    if(total !== 1){
+      if(dir === "next"){
+        if(current < total){
+          setPage(current + 1)
+        }else{
+          setPage(1)
+        }
+      }else{
+        if(current > 1){
+          setPage(current - 1)
+        }else{
+          setPage(total)
+        }
+      }
+    }
+  }
   const verify = role === process.env.REACT_APP_ORGANIZER
   useEffect(()=>{
-    getEvents(body)
-  },[send])
+    getEvents(body,page,4)
+  },[send,page])
   return (
     <Main>
       <FlexDiv>
@@ -34,7 +54,7 @@ const Events = () => {
         <input type="text" placeholder="City" name="city" value={body.city} onChange={(e)=>handleChange(e)}/>
         <input type="text" placeholder="Category" name="category" value={body.category} onChange={(e)=>handleChange(e)}/>
         <input type="text" placeholder="Venue" name="venue" value={body.venue} onChange={(e)=>handleChange(e)}/>
-        </div>
+        </div> 
         <div>
         <input type="date" name="startDate" value={body.startDate} onChange={(e)=>handleChange(e)}/>
         <input type="date" name="endDate" value={body.endDate} onChange={(e)=>handleChange(e)}/>
@@ -62,8 +82,8 @@ const Events = () => {
       }
       </GridCol>
       <Div>
-      <button>previous</button>
-        <button>next</button>
+      <button onClick={()=>handleDir("prev")}>previous</button>
+        <button onClick={()=>handleDir("next")}>next</button>
       </Div>
     </Main>
   )
