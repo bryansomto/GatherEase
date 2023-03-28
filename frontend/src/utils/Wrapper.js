@@ -47,14 +47,10 @@ export const FooterLoginAccount = [
 export const FooterEvents = [
   {
     text: "available events",
-    link: "#",
+    link: "/events",
   },
   {
-    text: "your events",
-    link: "#",
-  },
-  {
-    text: "create your own",
-    link: "#",
-  },
+    text: "available venues",
+    link: "/venues",
+  }
 ];

@@ -12,7 +12,7 @@ const Footer = () => {
       <div className="links">
         <List data={FooterSocial} title="social" />
         <List data={data} title="account" />
-        <List data={FooterEvents} title="events" />
+        {(role && id) && <List data={FooterEvents} title="events" />}
       </div>
       <div className="copyright">Copyright &copy;2023 GatherEase</div>
     </Main>

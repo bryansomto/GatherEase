@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import tw from "twin.macro";
 import { ContentHeader } from "../../all/headers/ContentHeader";
 import moment from "moment";
-import {FaClock,FaUser,FaCalendarDay} from "react-icons/fa"
+import {FaClock,FaUser,FaCalendarDay, FaInfo, FaInfoCircle} from "react-icons/fa"
 import {ImLocation2} from "react-icons/im"
 import {MdCategory} from "react-icons/md"
 import {BsFillShieldLockFill} from "react-icons/bs"
@@ -57,6 +57,10 @@ const Event = () => {
       <Detail icon={ <ImLocation2 className="icon"/>} title={"venue"} value={venue.name} link={true} url={`/venues/${venue.id}`}/>
       <Detail icon={ <MdCategory className="icon"/>} title={"category"} value={category.name}/>
       <Detail icon={ <BsFillShieldLockFill className="icon"/>} title={"privacy"} value={isPublic?"Public":"Private"}/>
+      {(isUser && !isExpired ) && <div className="info">
+        <FaInfoCircle/>
+        <p>You can only RSVP to an event a day before it occurs</p>
+      </div>}
       <div className="actions-event">
         {
           (!isUser && verified) && <Link to={`/events/update/${eventId}`}>Edit</Link> 
@@ -76,7 +80,11 @@ const Main = styled.div`
   ${tw`w-full max-w-[830px] space-y-5 flex flex-col`}
   img{
     ${tw`w-full rounded-lg`}
-  }.actions-event{
+  }
+  .info{
+    ${tw`text-newPurple text-sm flex items-center space-x-2`}
+  }
+  .actions-event{
     ${tw`flex items-center justify-end px-5`}
     a, button{
       ${tw`px-2.5 py-2 text-white rounded-lg border-none`}
